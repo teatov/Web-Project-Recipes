@@ -1,0 +1,35 @@
+{
+  "name": "web-project-mobile-operator",
+  "version": "1.0.0",
+  "description": "а",
+  "default": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/Teatov/Web-Project-Mobile-Operator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Teatov/Web-Project-Mobile-Operator/issues"
+  },
+  "homepage": "https://github.com/Teatov/Web-Project-Mobile-Operator#readme",
+  "dependencies": {
+    "ejs": "^3.1.7",
+    "express": "^4.17.3",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2"
+  }
+}
