@@ -1,21 +1,13 @@
 {
-  "name": "web-project-mobile-operator",
+  "name": "web-project-recipes",
   "version": "1.0.0",
   "description": "а",
-  "default": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/Teatov/Web-Project-Mobile-Operator.git"
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Teatov/Web-Project-Mobile-Operator/issues"
-  },
-  "homepage": "https://github.com/Teatov/Web-Project-Mobile-Operator#readme",
   "dependencies": {
     "ejs": "^3.1.7",
     "express": "^4.17.3",
@@ -31,5 +23,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.2"
+  },
+  "engines": {
+    "node": "^10"
   }
 }
