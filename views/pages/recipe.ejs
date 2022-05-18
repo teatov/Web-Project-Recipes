@@ -108,8 +108,7 @@
               <div class="card">
                 <p>
                   Салат "Оливье" подавайте сразу же после добавления майонеза и
-                  сметаны. Или заправляйте оливье непосредственно перед
-                  подачей.
+                  сметаны. Или заправляйте оливье непосредственно перед подачей.
                 </p>
               </div>
             </div>
@@ -207,61 +206,14 @@
         <ul class="list-narrow">
           <h2>ПОХОЖИЕ РЕЦЕПТЫ:</h2>
           <li class="flex justify-space-between flex-responsive">
-            <img
-              class="recipe-step-image modal-image"
-              src="./img/sm_208938.jpg"
-              alt=""
-            />
-            <div class="card">
-              <h2><a href="">Салат Оливье</a></h2>
-              <p>
-                Традиционный салат "Оливье", без которого не обходится
-                новогоднее праздничное застолье.
-              </p>
-              <div class="flex align-center">
-                <span class="icon icon--time"></span>
-                <h3>40 мин</h3>
-                <span class="icon icon--serving"></span>
-                <h3>4-6</h3>
-              </div>
-              <div class="card-bottom">
-                <span class="icon icon--thumb-up"></span>
-                <h3>3</h3>
-                <span class="icon icon--thumb-down"></span>
-                <h3>1</h3>
-              </div>
-            </div>
+            <%- include('../partials/recipe-card'); %>
           </li>
           <li class="flex justify-space-between flex-responsive">
-            <img
-              class="recipe-step-image modal-image"
-              src="./img/sm_208938.jpg"
-              alt=""
-            />
-            <div class="card">
-              <h2><a href="">Салат Оливье</a></h2>
-              <p>
-                Традиционный салат "Оливье", без которого не обходится
-                новогоднее праздничное застолье.
-              </p>
-              <div class="flex align-center">
-                <span class="icon icon--time"></span>
-                <h3>40 мин</h3>
-                <span class="icon icon--serving"></span>
-                <h3>4-6</h3>
-              </div>
-              <div class="card-bottom">
-                <span class="icon icon--thumb-up"></span>
-                <h3>3</h3>
-                <span class="icon icon--thumb-down"></span>
-                <h3>1</h3>
-              </div>
-            </div>
+            <%- include('../partials/recipe-card'); %>
           </li>
         </ul>
       </section>
     </div>
-    <%- include('../partials/footer'); %>
-    <%- include('../partials/modal'); %>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
   </body>
 </html>
