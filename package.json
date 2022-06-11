@@ -4,15 +4,23 @@
   "description": "а",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb server.js",
+    "import-dev-data": "node .\\db\\import-dev-data.js --import",
+    "delete-dev-data": "node .\\db\\import-dev-data.js --delete"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
     "ejs": "^3.1.7",
     "express": "^4.17.3",
-    "morgan": "^1.10.0"
+    "mongoose": "^6.3.6",
+    "morgan": "^1.10.0",
+    "slugify": "^1.6.5",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "eslint": "^8.12.0",
