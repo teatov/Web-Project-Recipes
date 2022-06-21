@@ -86,7 +86,7 @@ const recipeSchema = new mongoose.Schema(
     properties: [propertySchema],
     ingredients: [ingredientSchema],
     steps: [stepSchema],
-    tags: [{ type: String, trim: true, unique: true }],
+    tags: [{ type: String, trim: true }],
     likes: {
       type: Number,
       default: 0,
