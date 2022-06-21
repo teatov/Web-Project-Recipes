@@ -10,12 +10,15 @@ async function sendEmail(options) {
     },
   });
 
+  console.log(transporter);
+  
   const mailOptions = {
     from: "Едальня",
     to: options.email,
     subject: options.subject,
     text: options.message,
   };
+  console.log(mailOptions);
 
   await transporter.sendMail(mailOptions);
 }

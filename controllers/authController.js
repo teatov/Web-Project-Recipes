@@ -134,7 +134,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     "host"
   )}/api/v1/users/resetPassword/${resetToken}`;
 
-  const message = `Забыли пароль? Отправьте PATCH запрос со своим новым паролем и подтверждением пароля на: ${resetURL}.\nЕсли Вы не забывали свой пароль, пожалуйста, игнорируйте это письмо!`;
+  const message = `Забыли пароль? Отправьте PATCH запрос со своим новым паролем и подтверждением пароля на: ${resetURL}\nЕсли Вы не забывали свой пароль, пожалуйста, игнорируйте это письмо!`;
 
   try {
     await sendEmail({
