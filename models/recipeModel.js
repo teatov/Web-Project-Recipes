@@ -102,12 +102,24 @@ const recipeSchema = new mongoose.Schema(
       default: Date.now(),
       select: false,
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
+
+recipeSchema.index({ slug: 1 });
+
+recipeSchema.virtual("comments", {
+  ref: "Comment",
+  foreignField: "recipe",
+  localField: "_id",
+});
 
 recipeSchema.pre("save", function (next) {
   this.slug = slugify(this.name);
