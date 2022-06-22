@@ -39,23 +39,6 @@ const stepSchema = new mongoose.Schema({
   },
 });
 
-const commentSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "Comment must belong to a user"],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
-
 const recipeSchema = new mongoose.Schema(
   {
     name: {
@@ -95,7 +78,6 @@ const recipeSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    // comments: [commentSchema],
     slug: String,
     createdAt: {
       type: Date,
@@ -123,6 +105,14 @@ recipeSchema.virtual("comments", {
 
 recipeSchema.pre("save", function (next) {
   this.slug = slugify(this.name);
+  next();
+});
+
+recipeSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name photo",
+  });
   next();
 });
 

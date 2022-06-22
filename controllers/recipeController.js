@@ -10,6 +10,7 @@ exports.getRecipe = factory.getOne(Recipe, { path: "comments" });
 exports.createRecipe = factory.createOne(Recipe);
 exports.updateRecipe = factory.updateOne(Recipe, {
   checkAuthor: true,
+  restrictFields: ["likes", "dislikes", "slug", "createdAt", "user"],
 });
 
 exports.deleteRecipe = factory.deleteOne(Recipe, {

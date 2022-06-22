@@ -28,7 +28,7 @@ const commentSchema = new mongoose.Schema(
   }
 );
 
-commentSchema.index({ recipe: 1, user: 1 }, { unique: true });
+commentSchema.index({ recipe: 1, user: 1 });
 
 commentSchema.pre(/^find/, function (next) {
   this.populate({
