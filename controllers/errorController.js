@@ -36,12 +36,14 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
+  // Операционная ошибка
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
 
+    // Программная ошибка
   } else {
     console.error("ERROR", err);
 

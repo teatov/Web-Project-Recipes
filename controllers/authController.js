@@ -203,3 +203,16 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Авторизировать пользователя, отправить JWT
   createSendToken(user, 200, res);
 });
+
+exports.restrictToAuthor = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findById(req.params.id);
+
+    if (
+      doc &&
+      req.user.role !== "admin" &&
+      req.user.id !== String(doc.user._id)
+    ) {
+      return next(new AppError("Only author can perform this!", 403));
+    }
+  });

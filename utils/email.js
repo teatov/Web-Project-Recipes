@@ -11,7 +11,7 @@ async function sendEmail(options) {
   });
 
   console.log(transporter);
-  
+
   const mailOptions = {
     from: "Едальня",
     to: options.email,

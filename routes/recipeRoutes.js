@@ -9,24 +9,20 @@ router.use("/:recipeId/comments", commentRouter);
 
 router
   .route("/")
-  .get(authController.protect, recipeController.getAllRecipes)
-  .post(
-    authController.protect,
-    authController.restrictTo("user", "admin"),
-    recipeController.createRecipe
-  );
+  .get(recipeController.getAllRecipes)
+  .post(authController.protect, recipeController.createRecipe);
 
 router
   .route("/:id")
   .get(recipeController.getRecipe)
   .patch(
     authController.protect,
-    authController.restrictTo("user", "admin"),
+    authController.restrictToAuthor,
     recipeController.updateRecipe
   )
   .delete(
     authController.protect,
-    authController.restrictTo("user", "admin"),
+    authController.restrictToAuthor,
     recipeController.deleteRecipe
   );
 

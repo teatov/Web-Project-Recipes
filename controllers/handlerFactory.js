@@ -2,23 +2,13 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
 
-exports.deleteOne = (Model, options) =>
+exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
+    const doc = await Model.findByIdAndDelete(req.params.id);
 
     if (!doc) {
       return next(new AppError("No document found with that ID", 404));
     }
-
-    if (
-      options.checkAuthor &&
-      req.user.role !== "admin" &&
-      req.user.id !== String(doc.user._id)
-    ) {
-      return next(new AppError("Only author can delete this", 403));
-    }
-
-    await doc.deleteOne();
 
     res.status(204).json({
       status: "success",
@@ -28,38 +18,29 @@ exports.deleteOne = (Model, options) =>
 
 exports.updateOne = (Model, options) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
+    if (options.restrictFields && req.user.role !== "admin") {
+      options.restrictFields.forEach((field) => {
+        if (Object.prototype.hasOwnProperty.call(req.body, field)) {
+          return next(
+            new AppError("You are not permitted to update those fields", 400)
+          );
+        }
+      });
+    }
+
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!doc) {
       return next(new AppError("No document found with that ID", 404));
     }
 
-    if (
-      options.checkAuthor &&
-      req.user.role !== "admin" &&
-      req.user.id !== String(doc.user._id)
-    ) {
-      return next(new AppError("Only author can update this!", 403));
-    }
-
-    if (options.restrictFields && req.user.role !== "admin") {
-      options.restrictFields.forEach((field) => {
-        if (Object.prototype.hasOwnProperty.call(req.body, field)) {
-          return next(new AppError("You can't update those fields!", 400));
-        }
-      });
-    }
-
-    const docUpdated = await Model.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-      returnDocument: "after",
-    });
-
     res.status(200).json({
       status: "success",
       data: {
-        data: docUpdated,
+        data: doc,
       },
     });
   });

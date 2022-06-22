@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Recipe = require("./recipeModel");
 
 const commentSchema = new mongoose.Schema(
   {

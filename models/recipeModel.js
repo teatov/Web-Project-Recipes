@@ -1,44 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const propertySchema = new mongoose.Schema({
-  type: {
-    type: String,
-    trim: true,
-  },
-  value: {
-    type: String,
-    trim: true,
-  },
-});
-
-const ingredientSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-  },
-  amount: {
-    type: String,
-    trim: true,
-  },
-});
-
-const stepSchema = new mongoose.Schema({
-  number: {
-    type: Number,
-    required: true,
-  },
-  image: {
-    type: String,
-    trim: true,
-  },
-  text: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-});
-
 const recipeSchema = new mongoose.Schema(
   {
     name: {
@@ -66,10 +28,58 @@ const recipeSchema = new mongoose.Schema(
       required: [true, "A recipe must have a description"],
       trim: true,
     },
-    properties: [propertySchema],
-    ingredients: [ingredientSchema],
-    steps: [stepSchema],
-    tags: [{ type: String, trim: true }],
+    properties: [
+      {
+        type: {
+          type: String,
+          trim: true,
+          enum: ["time", "servings", "difficulty"],
+          required: true,
+        },
+        value: {
+          type: String,
+          trim: true,
+          required: true,
+        },
+      },
+    ],
+    ingredients: [
+      {
+        name: {
+          type: String,
+          trim: true,
+          required: true,
+        },
+        amount: {
+          type: String,
+          trim: true,
+          required: true,
+        },
+      },
+    ],
+    steps: [
+      {
+        number: {
+          type: Number,
+          required: true,
+        },
+        image: {
+          type: String,
+          trim: true,
+        },
+        text: {
+          type: String,
+          trim: true,
+          required: true,
+        },
+      },
+    ],
+    tags: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     likes: {
       type: Number,
       default: 0,
@@ -104,7 +114,7 @@ recipeSchema.virtual("comments", {
 });
 
 recipeSchema.pre("save", function (next) {
-  this.slug = slugify(this.name);
+  this.slug = slugify(this.name, { lower: true });
   next();
 });
 
