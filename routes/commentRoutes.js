@@ -8,6 +8,7 @@ router
   .route("/")
   .get(commentController.getAllComments)
   .post(
+    authController.protect,
     authController.restrictTo("user"),
     commentController.setRecipeUserIds,
     commentController.createComment
@@ -17,10 +18,12 @@ router
   .route("/:id")
   .get(commentController.getComment)
   .patch(
+    authController.protect,
     authController.restrictTo("user", "admin"),
     commentController.updateComment
   )
   .delete(
+    authController.protect,
     authController.restrictTo("user", "admin"),
     commentController.deleteComment
   );
