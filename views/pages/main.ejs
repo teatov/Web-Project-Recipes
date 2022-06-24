@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Едальня"}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+      <div class="flex flex-column align-center">
+        <h1>ЕДАЛЬНЯ</h1>
+        <h2>Рецепты приготовления блюд с фото</h2>
+        <p>Кулинарная книга с возможностью создания собственных рецептов</p>
+      </div>
+      <div class="divider"></div>
+      <h2>Новые рецепты горячих блюд:</h2>
+      <ul>
+        <% recipesHot.forEach((rec) => { %>
+        <li class="flex justify-space-between flex-responsive">
+          <%- include('../partials/recipe-card', {recipe: rec}); %>
+        </li>
+        <% }) %>
+      </ul>
+      <div class="divider"></div>
+      <h2>Новые рецепты холодных блюд:</h2>
+      <ul>
+        <% recipesCold.forEach((rec) => { %>
+        <li class="flex justify-space-between flex-responsive">
+          <%- include('../partials/recipe-card', {recipe: rec}); %>
+        </li>
+        <% }) %>
+      </ul>
+      <div class="divider"></div>
+      <h2>Новые рецепты закусок:</h2>
+      <ul>
+        <% recipesSnacks.forEach((rec) => { %>
+        <li class="flex justify-space-between flex-responsive">
+          <%- include('../partials/recipe-card', {recipe: rec}); %>
+        </li>
+        <% }) %>
+      </ul>
+      <div class="divider"></div>
+      <h2>Новые рецепты изделий из теста:</h2>
+      <ul>
+        <% recipesDough.forEach((rec) => { %>
+        <li class="flex justify-space-between flex-responsive">
+          <%- include('../partials/recipe-card', {recipe: rec}); %>
+        </li>
+        <% }) %>
+      </ul>
+      <div class="divider"></div>
+      <h2>Новые рецепты сладостей:</h2>
+      <ul>
+        <% recipesSweats.forEach((rec) => { %>
+        <li class="flex justify-space-between flex-responsive">
+          <%- include('../partials/recipe-card', {recipe: rec}); %>
+        </li>
+        <% }) %>
+      </ul>
+      <div class="divider"></div>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: title}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+
+      <section>
+        <div class="flex justify-center flex-column align-center fullscreen">
+            <p>Ошибка</p>
+            <div class="card bg-orange flex flex-column">
+                <h1><%= statusCode %></h1>
+                
+        </div>
+        <h2><%= msg %></h2>
+        </div>
+      </section>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

@@ -14,9 +14,18 @@ const recipeSchema = new mongoose.Schema(
       ],
       minlength: [2, "A recipe name must have more or equal then 2 characters"],
     },
+    dishType: {
+      type: String,
+      required: [true, "A recipe must have a type"],
+      trim: true,
+    },
     category: {
       type: String,
       required: [true, "A recipe must have a category"],
+      trim: true,
+    },
+    subcategory: {
+      type: String,
       trim: true,
     },
     image: {
@@ -43,51 +52,65 @@ const recipeSchema = new mongoose.Schema(
         },
       },
     ],
-    ingredients: [
-      {
-        name: {
-          type: String,
-          trim: true,
-          required: true,
+    ingredients: {
+      type: [
+        {
+          name: {
+            type: String,
+            trim: true,
+            required: true,
+          },
+          amount: {
+            type: String,
+            trim: true,
+            required: true,
+          },
         },
-        amount: {
-          type: String,
-          trim: true,
-          required: true,
-        },
-      },
-    ],
-    steps: [
-      {
-        number: {
-          type: Number,
-          required: true,
-        },
-        image: {
-          type: String,
-          trim: true,
-        },
-        text: {
-          type: String,
-          trim: true,
-          required: true,
-        },
-      },
-    ],
-    tags: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    likes: {
-      type: Number,
-      default: 0,
+      ],
+      validate: [
+        (val) => val.length >= 1 && val[0],
+        "There must be at least 1 ingredient",
+      ],
     },
-    dislikes: {
-      type: Number,
-      default: 0,
+    steps: {
+      type: [
+        {
+          number: {
+            type: Number,
+            required: true,
+          },
+          image: {
+            type: String,
+            trim: true,
+          },
+          text: {
+            type: String,
+            trim: true,
+            required: true,
+          },
+        },
+      ],
+      validate: [
+        (val) => val.length >= 1 && val[0],
+        "There must be at least 1 step",
+      ],
     },
+    tags: {
+      type: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+    },
+    // likes: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // dislikes: {
+    //   type: Number,
+    //   default: 0,
+    // },
     slug: String,
     createdAt: {
       type: Date,

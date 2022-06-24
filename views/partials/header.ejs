@@ -1,25 +1,31 @@
 <header>
   <div class="logo-container">
     <span class="icon icon--logo"></span>
-    <p>ЕДАЛЬНЯ</p>
+    <a href="/">ЕДАЛЬНЯ</a>
   </div>
 
   <nav class="flex justify-center header-nav hidden">
-    <div class="input-group">
-      <input type="text" name="" id="" /><button class="bg-orange">
+    <form class="input-group search-header">
+      <input type="text" id="search-header-text" /><button type="submit" class="bg-orange">
         <span class="icon icon--search"></span>
       </button>
-    </div>
+    </form>
     <div class="flex">
-      <a href="#" class="btn bg-yellow"
+      <% if (locals.user) { %>
+      <a href="/me" class="btn bg-yellow"
         ><span class="icon icon--user"></span
       ></a>
-      <a href="#" class="btn bg-green"
+      <a href="/createRecipe" class="btn bg-green"
         ><span class="icon icon--plus"></span>Создать</a
       >
+      <% } else { %>
+      <a href="/login" class="btn bg-yellow"
+        ><span class="icon icon--user"></span>Войти</a
+      >
+      <% } %>
     </div>
   </nav>
-  <a href="#" class="btn bg-yellow hamburger-menu"
-    ><span class="icon icon--menu"></span
-  ></a>
+  <button class="btn bg-yellow hamburger-menu">
+    <span class="icon icon--menu"></span>
+  </button>
 </header>

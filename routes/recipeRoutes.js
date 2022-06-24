@@ -7,23 +7,27 @@ const router = express.Router();
 
 router.use("/:recipeId/comments", commentRouter);
 
+router.get("/", recipeController.getAllRecipes);
+router.get("/:id", recipeController.getRecipe);
+
+router.use(authController.protect);
+
+router.post(
+  "/",
+  authController.setRecipeUserIds,
+  recipeController.createRecipe
+);
+
+router.use(recipeController.restrictToAuthor);
+
 router
   .route("/")
-  .get(recipeController.getAllRecipes)
-  .post(authController.protect, recipeController.createRecipe);
+  .patch(recipeController.updateRecipe)
+  .delete(recipeController.deleteRecipe);
 
 router
   .route("/:id")
-  .get(recipeController.getRecipe)
-  .patch(
-    authController.protect,
-    authController.restrictToAuthor,
-    recipeController.updateRecipe
-  )
-  .delete(
-    authController.protect,
-    authController.restrictToAuthor,
-    recipeController.deleteRecipe
-  );
+  .patch(recipeController.updateRecipe)
+  .delete(recipeController.deleteRecipe);
 
 module.exports = router;

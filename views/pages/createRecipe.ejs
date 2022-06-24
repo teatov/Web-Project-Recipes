@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Создать новый рецепт"}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная страница</a></li>
+        <li><a href="/recipes">Рецепты</a></li>
+        <% if (!recipe) { %>
+        <li><a href="#">Создание рецепта</a></li>
+        <% } else { %>
+          <li><a href="/recipes?dishType=<%= recipe.dishType %>"><%= recipe.dishType %></a></li>
+          <li><a href="/recipes?category=<%= recipe.category %>"><%= recipe.category %></a></li>
+          <% if (recipe.subcategory) {%>
+            <li><a href="/recipes?subcategory=<%= recipe.subcategory %>"><%= recipe.subcategory %></a></li>
+          <% } %>
+        <li><a href="/recipes/<%= recipe.slug %>"><%= recipe.name %></a></li>
+        <li><a href="#">Редактирование рецепта</a></li>
+        <% }%>
+      </ul>
+      <% if (!recipe) { %>
+      <h2>Создать новый рецепт</h2>
+      <% } else { %>
+      <h2>Редактировать рецепт</h2>
+      <% }%>
+      <form <%= recipe ? `data-recipe=${recipe.slug}` : '' %> class="<%= recipe ? 'recipe-update-form' : 'recipe-create-form' %>">
+        <div class="flex flex-column align-center">
+          <button type="reset" class="bg-orange">
+            <span class="icon icon--cross"></span>Сбросить все поля
+          </button>
+        </div>
+        <div class="flex justify-space-between flex-responsive">
+          <div class="flex flex-column">
+            <h3>Название:</h3>
+            <input type="text" id="name" value="<%= recipe?.name %>" />
+            <h3>Блюдо:</h3>
+              <select id="dish-type">
+              <% dishTypes.forEach((type) => { type.categories.forEach((category) => { let string = `${type.name}/${category.name}`; %><option value="<%= string %>"><%= string %></option><%  category.subcategories.forEach((subcategory) => { string = `${type.name}/${category.name}/${subcategory.name}` %>
+              <option value="<%= string %>"><%= string %></option>
+              <% })})}) %>
+            </select>
+          </div>
+          <div class="flex flex-column">
+            <h3>Фотография:</h3>
+            <label for="image" class="file-upload btn">
+              <span class="icon icon--plus"></span>
+              Загрузить файл...
+            </label>
+            <input
+              type="file"
+              accept="image/png, image/jpg, image/gif, image/jpeg"
+              id="image"
+            />
+          </div>
+          <div class="flex flex-column flex-grow">
+            <h3>Описание:</h3>
+            <textarea class="flex-grow comment-text" id="description" rows="5">
+<%- recipe?.description %></textarea
+            >
+          </div>
+        </div>
+        <div class="list-narrow">
+          <div class="flex justify-space-between flex-responsive">
+            <div class="flex flex-column flex-grow">
+              <h3>Ингредиенты:</h3>
+              <% if (!recipe) { %>
+              <div class="flex justify-space-between align-flex-end">
+                <textarea
+                  class="flex-grow comment-text ingredients-name"
+                  rows="1"
+                ></textarea>
+                <div>
+                  <h3>Количество:</h3>
+                  <input
+                    type="text"
+                    class="ingredients-amount input-narrow no-flex-grow"
+                  />
+                </div>
+                <button type="button" class="bg-orange remove-ingredient">
+                  <span class="icon icon--cross"></span>
+                </button>
+              </div>
+              <% } else { recipe.ingredients.forEach((ingredient) => { %>
+              <div class="flex justify-space-between align-flex-end">
+                <textarea
+                  class="flex-grow comment-text ingredients-name"
+                  rows="1"
+                >
+<%= ingredient?.name %></textarea
+                >
+                <div>
+                  <h3>Количество:</h3>
+                  <input
+                    type="text"
+                    class="ingredients-amount input-narrow no-flex-grow"
+                    value="<%- ingredient?.amount %>"
+                  />
+                </div>
+                <button type="button" class="bg-orange remove-ingredient">
+                  <span class="icon icon--cross"></span>
+                </button>
+              </div>
+              <% })}%>
+
+              <div class="flex justify-center">
+                <button type="button" class="bg-green add-ingredient">
+                  <span class="icon icon--plus"></span>Добавить ингредиент
+                </button>
+              </div>
+            </div>
+            <div class="flex flex-column">
+              <h3>Время готовки:</h3>
+              <input
+                type="text"
+                id="time"
+                value="<%= recipe?.properties.find((el) => el.type === 'time')?.value %>"
+              />
+              <h3>Количество порций:</h3>
+              <input
+                type="text"
+                id="servings"
+                value="<%= recipe?.properties.find((el) => el.type === 'servings')?.value %>"
+              />
+              <h3>Сложность:</h3>
+              <input
+                type="text"
+                id="difficulty"
+                value="<%= recipe?.properties.find((el) => el.type === 'difficulty')?.value %>"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-column flex-grow">
+          <h3>Шаги:</h3>
+          <% if (!recipe) { %>
+          <div class="flex justify-space-between align-flex-end">
+            <textarea
+              class="flex-grow comment-text steps-text"
+              rows="1"
+            ></textarea>
+            <div class="flex flex-column">
+              <h3>Фотография:</h3>
+              <label for="image" class="file-upload btn">
+                <span class="icon icon--plus"></span>
+                Загрузить файл...
+              </label>
+              <input
+                type="file"
+                accept="image/png, image/jpg, image/gif, image/jpeg"
+                class="steps-images"
+              />
+            </div>
+            <button type="button" class="bg-orange remove-step">
+              <span class="icon icon--cross"></span>
+            </button>
+          </div>
+          <% } else { recipe.steps.sort((a, b) => { return a.number - b.number;
+          }).forEach((step) => { %>
+          <div class="flex justify-space-between align-flex-end">
+            <textarea class="flex-grow comment-text steps-text" rows="1">
+<%- step?.text %></textarea
+            >
+            <div class="flex flex-column">
+              <h3>Фотография:</h3>
+              <label for="image" class="file-upload btn">
+                <span class="icon icon--plus"></span>
+                Загрузить файл...
+              </label>
+              <input
+                type="file"
+                accept="image/png, image/jpg, image/gif, image/jpeg"
+                class="steps-images"
+              />
+            </div>
+            <button type="button" class="bg-orange remove-step">
+              <span class="icon icon--cross"></span>
+            </button>
+          </div>
+          <% })}%>
+
+          <div class="flex flex-column align-center">
+            <button type="button" class="bg-green add-step">
+              <span class="icon icon--plus"></span>Добавить шаг
+            </button>
+          </div>
+        </div>
+        <div class="list-narrow">
+          <h3>Ключевые слова (через запятые):</h3>
+          <textarea class="flex-grow comment-text" id="tags" rows="1">
+<%= recipe?.tags.join(", ") %></textarea
+          >
+        </div>
+        <div class="flex flex-column align-center">
+          <% if (!recipe) { %><button type="submit" class="bg-yellow publish">
+            <span class="icon icon--checkmark"></span>Опубликовать
+          </button>
+          <% } else { %><button
+            type="submit"
+            class="bg-yellow publish-update"
+          >
+            <span class="icon icon--checkmark"></span>Обновить
+          </button>
+          <% }%>
+        </div>
+      </form>
+      <div class="divider"></div>
+    </div>
+
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

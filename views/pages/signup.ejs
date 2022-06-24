@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Создать учётную запись"}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная страница</a></li>
+        <li><a href="#">Создать учётную запись</a></li>
+      </ul>
+      <section>
+        <div class="flex justify-center flex-column align-center fullscreen">
+          <h1>Создать учётную запись</h1>
+          <form class="form--signup flex flex-column align-center">
+            <div class="flex justify-center flex-column align-flex-start">
+              <h3>Имя:</h3>
+              <input type="text"id="name" />
+              <h3>Электронная почта:</h3>
+              <input type="email"id="email" />
+              <h3>Пароль:</h3>
+              <input type="password"id="password" />
+              <h3>Подтверждение пароля:</h3>
+              <input type="password"id="password-confirm" />
+            </div>
+            <button type="submit" class="bg-green">
+              <span class="icon icon--user"></span>Создать
+            </button>
+          </form>
+          <p>Уже есть учётная запись? <a href="/login">Войдите!</a></p>
+        </div>
+      </section>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

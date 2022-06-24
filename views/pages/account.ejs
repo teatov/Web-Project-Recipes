@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Учётная запись"}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная страница</a></li>
+        <li><a href="#">Учётная запись</a></li>
+      </ul>
+      <div class="flex flex-responsive">
+        <div class="flex-grow">
+          <h2>Собственные рецепты</h2>
+          <ul>
+            <% userRecipes.forEach((recipe) => { %>
+            <li class="card flex flex-column">
+              <div>
+                <div class="flex align-flex-end justify-flex-start">
+                  <h2>
+                    <a href="/recipes/<%= recipe.slug %>"><%= recipe.name %></a>
+                  </h2>
+                  <h3><%= recipe.createdAt.toLocaleString() %></h3>
+                </div>
+
+                <p class="line-clamp line-clamp-1"><%= recipe.description %></p>
+                <div class="buttons-responsive">
+                  <a
+                    href="/recipes/<%= recipe.slug %>/edit"
+                    data-recipe="<%= recipe.slug %>"
+                    class="btn bg-yellow edit-recipe"
+                  >
+                    <span class="icon icon--edit"></span>Редактировать
+                  </a>
+                  <button
+                    data-recipe="<%= recipe.slug %>"
+                    class="bg-orange delete-recipe"
+                  >
+                    <span class="icon icon--cross"></span>Удалить
+                  </button>
+                </div>
+              </div>
+            </li>
+            <% })%>
+          </ul>
+          <a href="/createRecipe" class="btn bg-green">
+            <span class="icon icon--plus"></span>Создать новый рецепт
+          </a>
+        </div>
+        <div>
+          <button class="bg-orange logout-btn">
+            <span class="icon icon--cross"></span>Выйти из учётной записи
+          </button>
+          <div class="divider"></div>
+          <h2>Настройки учётной записи</h2>
+          <form class="form-user-data">
+            <h3>Имя:</h3>
+            <input
+              type="text"
+              
+              id="name"
+              value="<%= locals.user.name %>"
+            />
+            <h3>Электронная почта:</h3>
+            <input
+              type="email"
+              
+              id="email"
+              value="<%= locals.user.email %>"
+            />
+            <h3>Фотография:</h3>
+            <label for="photo" class="file-upload btn">
+              <span class="icon icon--plus"></span>
+              Загрузить файл...
+            </label>
+            <input
+              type="file"
+              accept="image/png, image/jpg, image/gif, image/jpeg"
+              
+              id="photo"
+            />
+            <button type="submit" class="bg-green flex">
+              <span class="icon icon--checkmark"></span>Сохранить
+            </button>
+          </form>
+
+          <div class="divider"></div>
+
+          <h2>Сменить пароль</h2>
+          <form class="form-user-password">
+            <h3>Текущий пароль:</h3>
+            <input type="password"id="password-current" />
+            <h3>Новый пароль:</h3>
+            <input type="password"id="password-new" />
+            <h3>Подтверждение нового пароля:</h3>
+            <input type="password"id="password-new-confirm" />
+            <button type="submit" class="bg-yellow flex">
+              <span class="icon icon--difficulty"></span>Сменить
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="divider"></div>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

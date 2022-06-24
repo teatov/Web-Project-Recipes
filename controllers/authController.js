@@ -64,6 +64,14 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+exports.logout = (req, res) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: "success" });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Получаем токен и проверяем, если он существует
   let token;
@@ -72,6 +80,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -80,7 +90,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Токен верификации
+  // 2) Верифицируем токен
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   // 3) Проверяем, если пользователь существует
@@ -103,8 +113,41 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // ВЫДАТЬ ДОСТУП К ЗАЩИЩЕННОМУ МАРШРУТУ
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
+
+// только для рендера
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) Верифицируем токен
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 2) Проверяем, если пользователь существует
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3) Проверяем, если пользователь сменил пароль после того как был выдан токен
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // ПОЛЬЗОВАТЕЛЬ АВТОРИЗИРОВАН
+      res.locals.user = currentUser;
+      req.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
@@ -204,15 +247,8 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.restrictToAuthor = (Model) =>
-  catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
-
-    if (
-      doc &&
-      req.user.role !== "admin" &&
-      req.user.id !== String(doc.user._id)
-    ) {
-      return next(new AppError("Only author can perform this!", 403));
-    }
-  });
+exports.setRecipeUserIds = (req, res, next) => {
+  if (!req.body.recipe) req.body.recipe = req.params.recipeId;
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};

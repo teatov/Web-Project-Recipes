@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Оливье классический</title>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head', {title: `${recipe.name} - Рецепт`}); %>
   </head>
   <body>
     <div class="content">
       <%- include('../partials/header'); %>
 
       <ul class="breadcrumbs">
-        <li><a href="#">Главная страница</a></li>
-        <li><a href="#">Рецепты</a></li>
-        <li><a href="#">Салаты</a></li>
-        <li><a href="#">Оливье классический</a></li>
+        <li><a href="/">Главная страница</a></li>
+        <li><a href="/recipes">Рецепты</a></li>
+        <li><a href="/recipes?dishType=<%= recipe.dishType %>"><%= recipe.dishType %></a></li>
+        <li><a href="/recipes?category=<%= recipe.category %>"><%= recipe.category %></a></li>
+        <% if (recipe.subcategory) {%>
+            <li><a href="/recipes?subcategory=<%= recipe.subcategory %>"><%= recipe.subcategory %></a></li>
+          <% } %>
+        <li><a href="#"><%= recipe.name %></a></li>
       </ul>
       <section>
         <div class="flex justify-flex-start flex-responsive">
-          <img class="main-image modal-image" src="./img/b8f005b8.jpg" alt="" />
+          <% if (recipe.image) {%>
+          <img class="main-image modal-image" src="/img/recipes/<%= recipe.image %>" alt="" />
+          <% } %>
           <div class="flex flex-column">
-            <h1>Оливье классический</h1>
+            <h1><%= recipe.name %></h1>
             <p>
-              Какой рецепт салата Оливье считать классическим: тот, по которому
-              его готовил Люсьен Оливье в московском ресторане "Эрмитаж", или
-              "советский", с колбасой и зеленым горошком? Обе версии имеют право
-              на жизнь. Напомним рецепт оливье классического более поздней
-              версии, как есть, без прикрас.
+              <%- recipe.description.replaceAll("\n", '<br/>') %>
             </p>
           </div>
         </div>
@@ -35,109 +36,82 @@
         >
           <ul class="card ingredients">
             <h2>ИНГРЕДИЕНТЫ:</h2>
+            <% recipe.ingredients.forEach((ingredient) => { %>
             <li>
-              <p>картофелины среднего размера</p>
+              <p><%= ingredient.name %></p>
               <span class="divider"></span>
-              <p>3 шт.</p>
+              <p><%= ingredient.amount %></p>
             </li>
-            <li>
-              <p>ветчины или докторской колбасы</p>
-              <span class="divider"></span>
-              <p>350 г</p>
-            </li>
-            <li>
-              <p>картофелины</p>
-              <span class="divider"></span>
-              <p>по вкусу</p>
-            </li>
+            <% }) %>
           </ul>
           <div class="flex flex-column align-flex-start recipe-properties">
-            <div class="card bg-green flex flex-column align-flex-end">
+            <% recipe.properties.forEach((property, i) => { %>
+            <div class="card bg-<%= new Array("green", "yellow", "orange").at(i % 3) %> flex flex-column align-flex-end">
               <div class="flex align-center">
-                <span class="icon icon--time"></span>
-                <h3>Время готовки:</h3>
+                <% if (property.type === "time") {%>
+                  <span class="icon icon--time"></span>
+                  <h3>Время готовки:</h3>
+                <% } %>
+                <% if (property.type === "servings") {%>
+                  <span class="icon icon--serving"></span>
+                  <h3>Количество порций:</h3>
+                <% } %>
+                <% if (property.type === "difficulty") {%>
+                  <span class="icon icon--difficulty"></span>
+                  <h3>Сложность:</h3>
+                <% } %>
               </div>
-              <h2>1 ч 30 мин</h2>
+              <h2><%= property.value %></h2>
             </div>
-            <div class="card bg-yellow flex flex-column align-flex-end">
-              <div class="flex align-center">
-                <span class="icon icon--serving"></span>
-                <h3>Количество порций:</h3>
-              </div>
-              <h2>6-8</h2>
-            </div>
-            <div class="card bg-orange flex flex-column align-flex-end">
-              <div class="flex align-center">
-                <span class="icon icon--difficulty"></span>
-                <h3>Сложность:</h3>
-              </div>
-              <h2>легко</h2>
-            </div>
+            <% }) %>
           </div>
         </div>
       </section>
       <section>
         <ul class="list-narrow">
           <h2>ПОШАГОВЫЙ РЕЦЕПТ:</h2>
-          <li class="flex justify-space-between flex-responsive">
+          <% recipe.steps.forEach((step) => { %>
+          <li class="flex flex-responsive">
+            <% if (step.image) {%>
             <img
               class="recipe-step-image modal-image"
-              src="./img/sm_208928.jpg"
+              src="/img/recipes/<%= step.image %>"
               alt=""
             />
-            <div class="flex flex-column">
-              <h2>ШАГ 1:</h2>
-              <div class="card">
+            <% } %>
+            <div class="flex flex-column flex-grow">
+              <h2>ШАГ <%= step.number %>:</h2>
+              <div class="card flex-grow">
                 <p>
-                  Подготовьте все необходимые продукты для оливье.<br /><br />Картофель
-                  и морковь отварите в кожуре (20-25 минут; готовность овощей
-                  проверяйте ножом или вилкой), остудите. Яйца сварите вкрутую
-                  (8-9 минут после закипания), остудите в холодной воде.
+                  <%- step.text.replaceAll("\n", '<br/>') %>
                 </p>
               </div>
             </div>
           </li>
-          <li class="flex justify-space-between flex-responsive">
-            <img
-              class="recipe-step-image modal-image"
-              src="./img/sm_208938.jpg"
-              alt=""
-            />
-            <div class="flex flex-column">
-              <h2>ШАГ 2:</h2>
-              <div class="card">
-                <p>
-                  Салат "Оливье" подавайте сразу же после добавления майонеза и
-                  сметаны. Или заправляйте оливье непосредственно перед подачей.
-                </p>
-              </div>
-            </div>
-          </li>
+          <% }) %>
           <h2 class="appetit">Приятного аппетита!</h2>
         </ul>
       </section>
       <section>
         <h3>КЛЮЧЕВЫЕ СЛОВА:</h3>
         <ul class="tags">
-          <li><a href="#">оливье</a></li>
-          <li><a href="#">праздничный стол</a></li>
-          <li><a href="#">классические рецепты</a></li>
-          <li><a href="#">новогодние рецепты</a></li>
-          <li><a href="#">классические салаты</a></li>
+          <% recipe.tags.forEach((tag) => { %>
+          <li><a href="#"><%= tag %></a></li>
+          <% }) %>
         </ul>
         <div class="flex justify-space-between flex-responsive">
           <div class="flex u-justify-center buttons-responsive">
             <a href="#" class="btn bg-yellow"
               ><span class="icon icon--share"></span>Поделиться</a
             >
-            <div class="flex u-justify-center">
+            <!-- <div class="flex u-justify-center">
               <a href="#" class="btn bg-green"
-                ><span class="icon icon--thumb-up"></span>25</a
+                ><span class="icon icon--thumb-up"></span><%= recipe.likes %></a
               >
               <a href="#" class="btn bg-orange"
-                ><span class="icon icon--thumb-down"></span>3</a
+                ><span class="icon icon--thumb-down"></span><%= recipe.dislikes %></a
               >
-            </div>
+            </div> -->
           </div>
           <div class="flex u-justify-center buttons-responsive">
             <a href="#" class="btn bg-green"
@@ -153,64 +127,45 @@
       <section>
         <ul class="list-narrow">
           <h2>КОММЕНТАРИИ:</h2>
+          <% recipe.comments.forEach((comment) => { %>
           <li class="flex justify-space-between">
-            <div class="card">
+            <div class="card flex-grow">
               <div class="flex align-center justify-flex-start">
-                <img src="./img/percent_PNG71.png" alt="" class="avatar" />
-                <h2>Чел</h2>
-                <h3>Четверг, 31 Декабря 2020 г. 16:36</h3>
+                <img src="/img/users/<%= comment.user.photo %>" alt="" class="avatar" />
+                <h2><%= comment.user.name %></h2>
+                <h3><%= comment.createdAt.toLocaleString() %></h3>
               </div>
               <p>
-                Очень много картофеля на такое количество колбасы. И зелень бы
-                не помешала. Очень много картофеля на такое количество колбасы.
-                И зелень бы не помешала. Очень много картофеля на такое
-                количество колбасы. И зелень бы не помешала.
+                <%= comment.text %>
               </p>
             </div>
           </li>
-          <li class="flex justify-space-between">
-            <div class="card">
-              <div class="flex align-center justify-flex-start">
-                <img src="./img/percent_PNG71.png" alt="" class="avatar" />
-                <h2>Чел</h2>
-                <h3>Четверг, 31 Декабря 2020 г. 16:36</h3>
-              </div>
-              <p>Очень много картофеля на такое количество колбасы.</p>
-            </div>
-          </li>
+          <% }) %>
           <div class="divider"></div>
           <h2>НАПИСАТЬ КОММЕНТАРИЙ:</h2>
-          <div class="flex justify-space-between flex-responsive">
-            <div class="flex flex-column">
-              <h3>Ваше имя:</h3>
-              <input type="text" name="" id="" />
-              <h3>Электронная почта:</h3>
-              <input type="email" name="" id="" />
-            </div>
             <textarea
-              class="comment-textarea"
-              name=""
+              class="flex-grow comment-text"
+              
               id=""
               rows="5"
             ></textarea>
-          </div>
           <div class="flex justify-flex-end">
-            <a href="#" class="btn bg-green"
-              ><span class="icon icon--comment"></span>Отправить комментарий</a
-            >
+            <button data-recipe="<%= recipe.slug %>" class="bg-green send-comment"><span class="icon icon--comment"></span>Отправить комментарий</button>
           </div>
         </ul>
         <div class="divider"></div>
       </section>
       <section>
         <ul class="list-narrow">
-          <h2>ПОХОЖИЕ РЕЦЕПТЫ:</h2>
-          <li class="flex justify-space-between flex-responsive">
-            <%- include('../partials/recipe-card'); %>
-          </li>
-          <li class="flex justify-space-between flex-responsive">
-            <%- include('../partials/recipe-card'); %>
-          </li>
+          <% if (similarRecipes.length > 0) { %>
+            <h2>ПОХОЖИЕ РЕЦЕПТЫ:</h2>
+            <% similarRecipes.forEach((similarRecipe) => { %>
+              <li class="flex justify-space-between flex-responsive">
+                <%- include('../partials/recipe-card', {recipe: similarRecipe}); %>
+              </li>
+              <% }) %>
+              <div class="divider"></div>
+              <% } %>
         </ul>
       </section>
     </div>

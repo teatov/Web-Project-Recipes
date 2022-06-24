@@ -32,6 +32,10 @@
   font-display: swap;
 }
 
+ul {
+  padding: 0;
+}
+
 :root {
   --color-green: #6bbf98;
   --color-yellow: #f2b84b;
@@ -56,6 +60,7 @@ body {
   background: var(--color-bg);
   overflow-wrap: break-word;
   outline-color: var(--color-red);
+  white-line: pre;
 }
 
 html {
@@ -109,7 +114,8 @@ a:active {
 
 .btn,
 button,
-input {
+input,
+select {
   text-transform: uppercase;
   margin: 0;
   align-items: center;
@@ -119,7 +125,8 @@ input {
 .card,
 button,
 input,
-textarea {
+textarea,
+select {
   line-height: 1.5rem;
   font-weight: 700;
   background-color: #fff;
@@ -131,6 +138,10 @@ textarea {
   gap: 0.25rem;
   transition: box-shadow var(--transition-duration),
     transform var(--transition-duration);
+}
+
+select {
+  width: 11rem;
 }
 
 .modal-image {
@@ -145,7 +156,8 @@ textarea {
 }
 
 .btn,
-button {
+button,
+select {
   cursor: pointer;
   white-space: nowrap;
 }
@@ -156,11 +168,13 @@ button {
 [type="reset"]:hover,
 [type="submit"]:hover,
 .modal-image:hover,
+select:hover,
 button:focus,
 button:hover,
 input:focus,
 textarea:focus,
-.modal-image:focus {
+.modal-image:focus,
+select:focus {
   text-decoration: none;
   transform: translate(-4px, -4px);
   box-shadow: 8px 8px 0 0 #000;
@@ -170,9 +184,18 @@ textarea:focus,
 .btn:active,
 button:active,
 input:active,
-.modal-image:active {
+.modal-image:active,
+select:active {
   transform: translate(0, 0);
   box-shadow: 4px 4px 0 0 #000;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-upload {
+  cursor: pointer;
 }
 
 div.btn {
@@ -224,7 +247,6 @@ header {
 
 .logo-container {
   background-color: #000;
-  color: #fff;
   gap: 0.5rem;
   padding: 0 1rem 0 0.5rem;
   height: 100%;
@@ -233,8 +255,9 @@ header {
   cursor: pointer;
 }
 
-.logo-container p {
+.logo-container a {
   font-size: 1.5rem;
+  color: #fff;
 }
 
 .input-group {
@@ -276,7 +299,8 @@ header .input-group {
 }
 
 .main-image,
-.recipe-step-image, .recipe-card-image {
+.recipe-step-image,
+.recipe-card-image {
   max-width: 40%;
   max-height: 20rem;
   border: 4px solid #000;
@@ -337,6 +361,7 @@ section {
 .divider {
   border-bottom: 4px solid #000;
   height: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 span.divider {
@@ -362,7 +387,7 @@ span.divider {
 .tags {
   display: flex;
   list-style: none;
-  margin: 0.5rem 0;
+  margin: 0 0 0.5rem;
 }
 
 .list-narrow {
@@ -392,10 +417,6 @@ span.divider {
   box-shadow: 4px 4px 0 0 #000;
   object-fit: cover;
   border-radius: 50%;
-}
-
-.comment-textarea {
-  flex-grow: 1;
 }
 
 footer {
@@ -436,9 +457,25 @@ footer {
   right: 35px;
 }
 
+.fullscreen {
+  min-height: calc(100vh - 11rem);
+}
+
 .zoomed {
   height: 100% !important;
   cursor: zoom-out !important;
+}
+
+.alert {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(4rem);
+  z-index: 9999;
+}
+
+.input-narrow {
+  width: 5rem !important;
 }
 
 .menu {
@@ -471,6 +508,10 @@ footer {
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.line-clamp-1 {
+  -webkit-line-clamp: 1;
 }
 
 .icon {
@@ -545,6 +586,9 @@ footer {
 .icon--cross {
   background: url(./../img/cross.svg) no-repeat top left;
 }
+.icon--edit {
+  background: url(./../img/edit.svg) no-repeat top left;
+}
 
 .icon--logo {
   background: url(./../img/logo.svg) no-repeat top left;
@@ -562,6 +606,13 @@ footer {
 
 .inline-flex {
   display: inline-flex !important;
+}
+
+.flex-grow {
+  flex-grow: 1 !important;
+}
+.no-flex-grow {
+  flex-grow: 0 !important;
 }
 
 .flex-row {
@@ -719,7 +770,7 @@ footer {
   .buttons-responsive {
     font-size: 0;
   }
-  
+
   .card-bottom {
     display: none;
   }
@@ -729,5 +780,4 @@ footer {
   .logo-container p {
     display: none;
   }
-
 }

@@ -1,30 +1,36 @@
-<img class="recipe-card-image modal-image" src="./img/sm_208938.jpg" alt="" />
-<div class="card flex flex-column justify-space-between align-flex-end">
+<% if (recipe.image) { %>
+<img
+  class="recipe-card-image modal-image"
+  src="/img/recipes/<%= recipe.image %>"
+  alt=""
+/>
+<% } %>
+<div
+  class="card flex flex-column justify-space-between align-stretch flex-grow"
+>
   <div>
-    <h2><a href="">Салат Оливье</a></h2>
-    <p class="line-clamp">
-      Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье. Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье.Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье. Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье.Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье. Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье.Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье. Традиционный салат "Оливье", без которого не обходится новогоднее
-      праздничное застолье.
-    </p>
+    <h2><a href="/recipes/<%= recipe.slug %>"><%= recipe.name %></a></h2>
+    <p class="line-clamp"><%- recipe.description %></p>
     <div class="flex align-center">
-      <span class="icon icon--time"></span>
-      <h3>40 мин</h3>
-      <span class="icon icon--serving"></span>
-      <h3>4-6</h3>
+      <% recipe.properties.forEach((property) => { %>
+      <div class="flex align-center">
+        <% if (property.type === "time") {%>
+        <span class="icon icon--time"></span>
+        <% } %> <% if (property.type === "servings") {%>
+        <span class="icon icon--serving"></span>
+        <% } %> <% if (property.type === "difficulty") {%>
+        <span class="icon icon--difficulty"></span>
+        <% } %>
+      </div>
+      <h3><%= property.value %></h3>
+      <% }) %>
     </div>
   </div>
 
-  <div class="flex align-center">
+  <!-- <div class="flex align-center justify-flex-end">
     <span class="icon icon--thumb-up"></span>
-    <h3>3</h3>
+    <h3><%= recipe.likes %></h3>
     <span class="icon icon--thumb-down"></span>
-    <h3>1</h3>
-  </div>
+    <h3><%= recipe.dislikes %></h3>
+  </div> -->
 </div>

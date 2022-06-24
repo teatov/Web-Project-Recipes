@@ -10,3 +10,5 @@ exports.updateRecipe = factory.updateOne(Recipe, {
 });
 
 exports.deleteRecipe = factory.deleteOne(Recipe);
+
+exports.restrictToAuthor = factory.restrictToAuthor(Recipe);

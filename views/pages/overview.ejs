@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Рецепты"}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная страница</a></li>
+        <li><a href="/recipes">Рецепты</a></li>
+      </ul>
+      <div class="flex flex-responsive">
+        <div>
+          <h2>Поиск</h2>
+          <form class="search-form">
+            <h3>Содержит:</h3>
+          <input type="text" id="contains" value="<%= query.search %>" />
+          <h3>Блюдо:</h3>
+          <select id="dish-type">
+            <option value="">...</option>
+            <% dishTypes.forEach((type) => { type.categories.forEach((category) => { let string = `${type.name}/${category.name}`; %><option <%= query.category === category.name && !query.subcategory ? "selected" : "" %> value="<%= string %>"><%= string %></option><%  category.subcategories.forEach((subcategory) => { string = `${type.name}/${category.name}/${subcategory.name}` %>
+              <option <%= query.subcategory === subcategory.name ? "selected" : "" %> value="<%= string %>"><%= string %></option>
+              <% })})}) %>
+          </select>
+          <h3>Сортировка:</h3>
+          <select id="sort">
+            <option value="-createdAt">Сначала новые</option>
+            <option value="createdAt">Сначала старые</option>
+            <option value="name">По названию</option>
+          </select>
+          <div class="flex flex-column align-center">
+            <button type="submit" class="bg-orange">
+            <span class="icon icon--search"></span>Поиск
+          </button>
+          </form>
+          
+          </div>
+        </div>
+        <div class="flex-grow">
+          <% recipes.forEach((recipe) => { %>
+          <li class="flex justify-space-between flex-responsive">
+            <%- include('../partials/recipe-card', {recipe: recipe}); %>
+          </li>
+          <% }) %>
+        </div>
+      </div>
+      <div class="divider"></div>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

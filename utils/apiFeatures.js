@@ -41,10 +41,31 @@ class APIFeatures {
 
   paginate() {
     const page = this.queryString.page * 1 || 1;
-    const limit = this.queryString.limit * 1 || 100;
+    const limit = this.queryString.limit * 1 || 50;
     const skip = (page - 1) * limit;
 
     this.query = this.query.skip(skip).limit(limit);
+
+    return this;
+  }
+
+  search() {
+    if (this.queryString.search) {
+      const search = this.queryString.search
+        .slice(1, this.queryString.search.length - 1)
+        .replace(/\s+/g, " ")
+        .replaceAll("+", " ");
+      const searchRegex = `(${search.replaceAll(" ", "|")})`;
+      console.log(search, searchRegex);
+      this.query = this.query.find({
+        $or: [
+          { name: { $regex: searchRegex, $options: "i" } },
+          { subcategory: { $regex: searchRegex, $options: "i" } },
+          { category: { $regex: searchRegex, $options: "i" } },
+          { tags: { $regex: searchRegex, $options: "i" } },
+        ],
+      });
+    }
 
     return this;
   }

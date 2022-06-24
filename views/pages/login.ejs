@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Войти в учётную запись"}); %>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная страница</a></li>
+        <li><a href="#">Войти в учётную запись</a></li>
+      </ul>
+      <section>
+        <div class="flex justify-center flex-column align-center fullscreen">
+          <h1>Войти в учётную запись</h1>
+          <form class="form--login flex flex-column align-center">
+            <div class="flex justify-center flex-column align-flex-start">
+              <h3>Электронная почта:</h3>
+              <input type="email"id="email" />
+              <h3>Пароль:</h3>
+              <input type="password"id="password" />
+            </div>
+            <button type="submit" class="bg-yellow">
+              <span class="icon icon--user"></span>Войти
+            </button>
+          </form>
+          <p>Нет учётной записи? <a href="/signup">Зарегистрируйтесь!</a></p>
+        </div>
+      </section>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>
