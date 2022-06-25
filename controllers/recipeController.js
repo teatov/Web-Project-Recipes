@@ -31,6 +31,7 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
   if (req.files.imageCover) {
     req.body.image = `recipe-${req.body.idRecipe}-${Date.now()}.jpeg`;
     await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 1333, { withoutEnlargement: true })
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(`public/img/recipes/${req.body.image}`);
@@ -46,7 +47,7 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
           }-${Date.now()}-${i}.jpeg`;
 
           await sharp(req.files.stepImage[i].buffer)
-            .resize(2000, 1333)
+            .resize(2000, 1333, { withoutEnlargement: true })
             .toFormat("jpeg")
             .jpeg({ quality: 90 })
             .toFile(`public/img/recipes/${filename}`);
