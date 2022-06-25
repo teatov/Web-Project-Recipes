@@ -13,7 +13,12 @@ router.get("/recipes/:slug", viewController.getRecipe);
 router.get("/login", viewController.getLoginForm);
 router.get("/signup", viewController.getSignupForm);
 
-router.get("/me", authController.protect, viewController.getAccount);
+router.get(
+  "/me",
+  authController.protect,
+  authController.isLoggedIn,
+  viewController.getAccount
+);
 router.get(
   "/createRecipe",
   authController.protect,
