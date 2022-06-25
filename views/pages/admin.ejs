@@ -8,7 +8,6 @@
     <div class="content">
       <%- include('../partials/header'); %>
       <h2>Категории</h2>
-      <input id="new-type-name" type="text" />
       <ol>
         <a class="type-add" href="">[+]</a>
         <% dishTypes.forEach((type) => { %>
@@ -34,6 +33,7 @@
         </ol>
         <% }) %>
       </ol>
+      <input id="new-type-name" type="text" />
     </div>
     <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
   </body>
