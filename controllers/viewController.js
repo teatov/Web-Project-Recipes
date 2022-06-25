@@ -37,14 +37,12 @@ exports.getRecipe = catchAsync(async (req, res, next) => {
   }
 
   const features = new APIFeatures(
-    Recipe.find({ slug: { $ne: req.params.slug } }),
+    Recipe.find({ slug: { $ne: req.params.slug }, category: recipe.category }),
     {
       limit: 3,
       fields: "name,image,description,properties,likes,dislikes,slug",
-      search: recipe.name.replaceAll(" ", "+"),
     }
   )
-    .filter()
     .search()
     .sort()
     .limitFields()
