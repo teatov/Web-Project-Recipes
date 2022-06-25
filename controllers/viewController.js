@@ -88,7 +88,6 @@ exports.getAccount = catchAsync(async (req, res, next) => {
 
 exports.getRecipeForm = catchAsync(async (req, res, next) => {
   const dishTypes = await DishType.find();
-  console.log(dishTypes);
   res.status(200).render("pages/createRecipe", { recipe: null, dishTypes });
 });
 
