@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Пожалуйста, введите имя"],
+      maxlength: [50, "Имя слишком длинное"],
     },
     email: {
       type: String,
@@ -15,6 +16,7 @@ const userSchema = new mongoose.Schema(
       unique: [true, "Пользователь с такой почтой уже существует"],
       lowercase: true,
       validate: [validator.isEmail, "Некорректная почта"],
+      maxlength: [50, "Почта слишком длинная"],
     },
     photo: {
       type: String,
@@ -28,8 +30,9 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Пожалуйста, введите пароль"],
-      minlength: 6,
+      minlength: [6, "Пароль должен состоять минимум из 6 символов"],
       select: false,
+      maxlength: [50, "Пароль слишком длинный"],
     },
     passwordConfirm: {
       type: String,

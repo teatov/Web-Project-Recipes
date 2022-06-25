@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const dishTypeSchema = new mongoose.Schema(
   {
-    name: { type: String, trim: true, required: true },
+    name: { type: String, trim: true, required: [true, "Нет имени"] },
     categories: [
       {
-        name: { type: String, trim: true, required: true },
+        name: { type: String, trim: true, required: [true, "Нет имени"] },
         subcategories: [
           {
-            name: { type: String, trim: true, required: true },
+            name: { type: String, trim: true, required: [true, "Нет имени"] },
           },
         ],
       },

@@ -6,7 +6,7 @@ const recipeSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "У рецепта должно быть имя"],
-      unique: true,
+      unique: [true, "Рецепт с таким названием уже существует"],
       trim: true,
       maxlength: [50, "Название рецепта слишком длинное"],
       minlength: [2, "Название рецепта слишком короткое"],
@@ -33,6 +33,7 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: [true, "У рецепта должно быть описание"],
       trim: true,
+      maxlength: [500, "Описание рецепта слишком длинное"],
     },
     properties: [
       {
@@ -40,12 +41,13 @@ const recipeSchema = new mongoose.Schema(
           type: String,
           trim: true,
           enum: ["time", "servings", "difficulty"],
-          required: true,
+          required: [true, "Свойство обязательно"],
         },
         value: {
           type: String,
           trim: true,
-          required: true,
+          required: [true, "У свойства рецепта должно быть значение"],
+          maxlength: [50, "Значение свойства слишком длинное"],
         },
       },
     ],
@@ -55,12 +57,14 @@ const recipeSchema = new mongoose.Schema(
           name: {
             type: String,
             trim: true,
-            required: true,
+            required: [true, "У ингредиента должно быть название"],
+            maxlength: [50, "Название ингредиента слишком длинное"],
           },
           amount: {
             type: String,
             trim: true,
-            required: true,
+            required: [true, "У ингредиента должно быть количество"],
+            maxlength: [50, "Количество ингредиента слишком длинное"],
           },
         },
       ],
@@ -83,7 +87,8 @@ const recipeSchema = new mongoose.Schema(
           text: {
             type: String,
             trim: true,
-            required: true,
+            required: [true, "У шага должен быть текст"],
+            maxlength: [500, "Текст шага слишком длинный"],
           },
         },
       ],
@@ -97,6 +102,7 @@ const recipeSchema = new mongoose.Schema(
         {
           type: String,
           trim: true,
+          maxlength: [50, "Ключевое слово слишком длинное"],
         },
       ],
     },
@@ -117,7 +123,10 @@ const recipeSchema = new mongoose.Schema(
   }
 );
 
-recipeSchema.index({ slug: 1 });
+recipeSchema.index(
+  { slug: 1 },
+  { unique: [true, "Рецепт с таким названием уже существует"] }
+);
 
 recipeSchema.virtual("comments", {
   ref: "Comment",
