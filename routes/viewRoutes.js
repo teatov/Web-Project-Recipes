@@ -4,14 +4,6 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
-router.use(function (req, res, next) {
-  res.setHeader(
-    "Content-Security-Policy-Report-Only",
-    "default-src 'self'; img-src 'self' https://res.cloudinary.com;"
-  );
-  next();
-});
-
 router.use(authController.isLoggedIn);
 
 router.get("/", viewController.getMain);

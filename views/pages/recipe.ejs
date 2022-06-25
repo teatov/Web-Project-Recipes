@@ -20,7 +20,7 @@
       <section>
         <div class="flex justify-flex-start flex-responsive">
           <% if (recipe.image) {%>
-          <img class="main-image modal-image" src="<%= recipe.image %>" alt="" />
+          <img class="main-image modal-image" crossorigin="anonymous" src="<%= recipe.image %>" alt="" />
           <% } %>
           <div class="flex flex-column">
             <h1><%= recipe.name %></h1>
@@ -76,6 +76,7 @@
             <% if (step.image) {%>
             <img
               class="recipe-step-image modal-image"
+              crossorigin="anonymous"
               src="<%= step.image %>"
               alt=""
             />
@@ -124,7 +125,7 @@
           <li class="flex justify-space-between">
             <div class="card flex-grow">
               <div class="flex align-center justify-flex-start">
-                <img src="<%= comment.user.photo %>" alt="" class="avatar" />
+                <img src="<%= comment.user.photo %>" crossorigin="anonymous" alt="" class="avatar" />
                 <h2><%= comment.user.name %></h2>
                 <h3><%= comment.createdAt.toLocaleString() %></h3>
               </div>

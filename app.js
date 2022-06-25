@@ -30,7 +30,16 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // установить заголовки безопасности http
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "https://res.cloudinary.com"],
+      },
+    },
+  })
+);
 
 // Логи запросов
 if (process.env.NODE_ENV === "development") {
