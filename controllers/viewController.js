@@ -122,7 +122,7 @@ exports.getMain = catchAsync(async (req, res, next) => {
     {
       limit: 3,
       fields: "name,image,description,properties,likes,dislikes,slug",
-      dishType: "Горячие блюда",
+      dishType: "Первые блюда",
     }
   )
     .filter()
@@ -136,7 +136,7 @@ exports.getMain = catchAsync(async (req, res, next) => {
     {
       limit: 3,
       fields: "name,image,description,properties,likes,dislikes,slug",
-      dishType: "Холодные блюда",
+      dishType: "Вторые блюда",
     }
   )
     .filter()
