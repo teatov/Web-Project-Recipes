@@ -24,7 +24,7 @@ exports.createCategory = catchAsync(async (req, res, next) => {
   const doc = await DishType.findById(req.params.dishTypeId);
 
   if (!doc) {
-    return next(new AppError("No document found with that ID", 404));
+    return next(new AppError("Документ с таким ID не найден", 404));
   }
 
   await doc.categories.push(req.body);
@@ -41,7 +41,7 @@ exports.deleteCategory = catchAsync(async (req, res, next) => {
   const doc = await DishType.findById(req.params.dishTypeId);
 
   if (!doc) {
-    return next(new AppError("No document found with that ID", 404));
+    return next(new AppError("Документ с таким ID не найден", 404));
   }
 
   await doc.categories.remove({ _id: req.params.categoryId });
@@ -56,7 +56,7 @@ exports.createSubcategory = catchAsync(async (req, res, next) => {
   const doc = await DishType.findById(req.params.dishTypeId);
 
   if (!doc) {
-    return next(new AppError("No type found with that ID", 404));
+    return next(new AppError("Тип с таким ID не найден", 404));
   }
 
   const docCat = await doc.categories.find(
@@ -64,7 +64,7 @@ exports.createSubcategory = catchAsync(async (req, res, next) => {
   );
 
   if (!docCat) {
-    return next(new AppError("No category found with that ID", 404));
+    return next(new AppError("Категория с таким ID не найдена", 404));
   }
 
   await docCat.subcategories.push(req.body);
@@ -81,7 +81,7 @@ exports.deleteSubcategory = catchAsync(async (req, res, next) => {
   const doc = await DishType.findById(req.params.dishTypeId);
 
   if (!doc) {
-    return next(new AppError("No type found with that ID", 404));
+    return next(new AppError("Тип с таким ID не найден", 404));
   }
 
   const docCat = await doc.categories.find(
@@ -89,7 +89,7 @@ exports.deleteSubcategory = catchAsync(async (req, res, next) => {
   );
 
   if (!docCat) {
-    return next(new AppError("No category found with that ID", 404));
+    return next(new AppError("Категория с таким ID не найден", 404));
   }
 
   await docCat.subcategories.remove({ _id: req.params.subcategoryId });
@@ -113,7 +113,7 @@ exports.getTypeByCategory = catchAsync(async (req, res, next) => {
   }
 
   if (!doc) {
-    return next(new AppError("No type found with that category", 404));
+    return next(new AppError("Тип с таким ID не найден", 404));
   }
 
   res.status(201).json({

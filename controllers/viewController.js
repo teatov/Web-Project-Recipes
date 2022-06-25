@@ -19,7 +19,6 @@ exports.getOverview = catchAsync(async (req, res, next) => {
     .paginate();
   const recipes = await features.query;
   const dishTypes = await DishType.find();
-  console.log(dishTypes);
   res.status(200).render("pages/overview", {
     recipes,
     dishTypes,
@@ -34,7 +33,7 @@ exports.getRecipe = catchAsync(async (req, res, next) => {
   });
 
   if (!recipe) {
-    return next(new AppError("There is no recipe with that name.", 404));
+    return next(new AppError("Рецепта с таким названием не существует.", 404));
   }
 
   const features = new APIFeatures(
@@ -89,7 +88,6 @@ exports.getAccount = catchAsync(async (req, res, next) => {
 
 exports.getRecipeForm = catchAsync(async (req, res, next) => {
   const dishTypes = await DishType.find();
-  console.log(dishTypes);
   res.status(200).render("pages/createRecipe", { recipe: null, dishTypes });
 });
 
@@ -97,11 +95,10 @@ exports.getRecipeEditForm = catchAsync(async (req, res, next) => {
   const recipe = await Recipe.findOne({ slug: req.params.slug });
 
   if (!recipe) {
-    return next(new AppError("There is no recipe with that name.", 404));
+    return next(new AppError("Рецепта с таким названием не существует.", 404));
   }
 
   const dishTypes = await DishType.find();
-  console.log(dishTypes);
   res.status(200).render("pages/createRecipe", { recipe, dishTypes });
 });
 
@@ -176,13 +173,6 @@ exports.getMain = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
   const recipesSweats = await featuresSweats.query;
-  console.log(
-    recipesSnacks,
-    recipesCold,
-    recipesHot,
-    recipesDough,
-    recipesSweats
-  );
 
   res.status(200).render("pages/main", {
     recipesSnacks,

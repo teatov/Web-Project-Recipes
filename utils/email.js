@@ -1,5 +1,6 @@
+const path = require("path");
 const nodemailer = require("nodemailer");
-const ejs = require("ejs");
+const pug = require("ejs");
 const htmlToText = require("html-to-text");
 
 module.exports = class Email {
@@ -11,17 +12,6 @@ module.exports = class Email {
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === "production") {
-      return nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        auth: {
-          user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD,
-        },
-      });
-    }
-
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
@@ -32,12 +22,15 @@ module.exports = class Email {
     });
   }
 
-  async send(subject) {
-    const html = ejs.renderFile(`${__dirname}/../views/pages/email.ejs`, {
-      firstName: this.firstName,
-      url: this.url,
-      subject,
-    });
+  async send(template, subject) {
+    const html = await pug.renderFile(
+      path.join(__dirname, `/../views/pages/email.ejs`),
+      {
+        firstName: this.firstName,
+        url: this.url,
+        subject,
+      }
+    );
 
     const mailOptions = {
       from: this.from,
@@ -51,10 +44,13 @@ module.exports = class Email {
   }
 
   async sendWelcome() {
-    await this.send("Добро пожаловать к Едальне!");
+    await this.send("welcome", "Добро пожаловать на Едальню!");
   }
 
   async sendPasswordReset() {
-    await this.send("Ваш токен сброса пароля");
+    await this.send(
+      "passwordReset",
+      "Ваш токен сброса пароля. (Действителен только 10 минут)"
+    );
   }
 };

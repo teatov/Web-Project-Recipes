@@ -13,7 +13,7 @@ const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
-    cb(new AppError("Not an image! Please upload only images.", 400), false);
+    cb(new AppError("Пожалуйста, загружайте только изображения.", 400), false);
   }
 };
 const upload = multer({
@@ -24,7 +24,6 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single("photo");
 
 exports.processUserPhoto = catchAsync(async (req, res, next) => {
-  console.log("!!!!!!!!", req.file);
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -47,14 +46,15 @@ function filterObj(obj, ...allowedFields) {
 }
 
 exports.getMe = (req, res, next) => {
-  console.log(req.user);
   req.params.id = req.user.id;
   next();
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
-    return next(new AppError("This route is not for password updates", 400));
+    return next(
+      new AppError("По этому маршруту нельзя обновлять пароль!", 400)
+    );
   }
 
   const filteredBody = filterObj(req.body, "name", "email");

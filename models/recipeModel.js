@@ -5,23 +5,20 @@ const recipeSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "A recipe must have a name"],
+      required: [true, "У рецепта должно быть имя"],
       unique: true,
       trim: true,
-      maxlength: [
-        50,
-        "A recipe name must have less or equal then 50 characters",
-      ],
-      minlength: [2, "A recipe name must have more or equal then 2 characters"],
+      maxlength: [50, "Название рецепта слишком длинное"],
+      minlength: [2, "Название рецепта слишком короткое"],
     },
     dishType: {
       type: String,
-      required: [true, "A recipe must have a type"],
+      required: [true, "У рецепта должен быть тип"],
       trim: true,
     },
     category: {
       type: String,
-      required: [true, "A recipe must have a category"],
+      required: [true, "У рецепта должна быть категория"],
       trim: true,
     },
     subcategory: {
@@ -34,7 +31,7 @@ const recipeSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, "A recipe must have a description"],
+      required: [true, "У рецепта должно быть описание"],
       trim: true,
     },
     properties: [
@@ -69,7 +66,7 @@ const recipeSchema = new mongoose.Schema(
       ],
       validate: [
         (val) => val.length >= 1 && val[0],
-        "There must be at least 1 ingredient",
+        "У рецепта должен быть хотя бы один ингредиент",
       ],
     },
     steps: {
@@ -92,7 +89,7 @@ const recipeSchema = new mongoose.Schema(
       ],
       validate: [
         (val) => val.length >= 1 && val[0],
-        "There must be at least 1 step",
+        "У рецепта должен быть хотя бы один шаг",
       ],
     },
     tags: {
@@ -103,14 +100,6 @@ const recipeSchema = new mongoose.Schema(
         },
       ],
     },
-    // likes: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // dislikes: {
-    //   type: Number,
-    //   default: 0,
-    // },
     slug: String,
     createdAt: {
       type: Date,

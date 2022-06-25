@@ -7,14 +7,14 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please provide your name"],
+      required: [true, "Пожалуйста, введите имя"],
     },
     email: {
       type: String,
-      required: [true, "Please provide your email"],
-      unique: [true, "User with this email already exists"],
+      required: [true, "Пожалуйста, введите почту"],
+      unique: [true, "Пользователь с такой почтой уже существует"],
       lowercase: true,
-      validate: [validator.isEmail, "Invalid email"],
+      validate: [validator.isEmail, "Некорректная почта"],
     },
     photo: {
       type: String,
@@ -27,18 +27,18 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
-      minlength: 8,
+      required: [true, "Пожалуйста, введите пароль"],
+      minlength: 6,
       select: false,
     },
     passwordConfirm: {
       type: String,
-      required: [true, "Please confirm your password"],
+      required: [true, "Пожалуйста, подтвердите пароль"],
       validate: {
         validator: function (el) {
           return el === this.password;
         },
-        message: "Passwords are not the same",
+        message: "Пароль не подтверждён",
       },
     },
     passwordChangedAt: Date,

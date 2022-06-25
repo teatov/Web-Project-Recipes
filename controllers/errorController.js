@@ -8,10 +8,10 @@ const handleCastErrorDB = (err) => {
 const handleDuplicateFieldsDB = (err) => {
   let message;
   if (err.keyValue.email) {
-    message = "This email is already taken!";
+    message = "Пользователь с такой почтой уже существует!";
   } else {
     const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
-    message = `Duplicate field value: ${value}. Please use another value!`;
+    message = `Поле со значением "${value}" уже существует. Используйте другое!`;
   }
 
   return new AppError(message, 400);
@@ -20,15 +20,18 @@ const handleDuplicateFieldsDB = (err) => {
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
 
-  const message = `Invalid input data. ${errors.join(". ")}`;
+  const message = `Введённые данные некорректны. ${errors.join(". ")}`;
   return new AppError(message, 400);
 };
 
 const handleJWTError = () =>
-  new AppError("Invalid token. Please log in again!", 401);
+  new AppError("Неверный токен. Выполните вход ещё раз!", 401);
 
 const handleJWTExpiredError = () =>
-  new AppError("Your token has expired! Please log in again.", 401);
+  new AppError(
+    "Срок действия вашего токена истёк! Выполните вход ещё раз.",
+    401
+  );
 
 const sendErrorDev = (err, req, res) => {
   // A) API
@@ -44,7 +47,7 @@ const sendErrorDev = (err, req, res) => {
   // B) РЕНДЕР
   console.error("ERROR", err);
   return res.status(err.statusCode).render("pages/error", {
-    title: "Something went wrong!",
+    title: "Что-то пошло не так!",
     msg: err.message,
     statusCode: err.statusCode,
   });
@@ -64,7 +67,7 @@ const sendErrorProd = (err, req, res) => {
     console.error("ERROR", err);
     return res.status(500).json({
       status: "error",
-      message: "Something went very wrong!",
+      message: "Что-то пошло не так!",
     });
   }
 
@@ -72,7 +75,7 @@ const sendErrorProd = (err, req, res) => {
   // A) операционная ошибка
   if (err.isOperational) {
     return res.status(err.statusCode).render("pages/error", {
-      title: "Something went wrong!",
+      title: "Что-то пошло не так!",
       msg: err.message,
       statusCode: err.statusCode,
     });
@@ -80,8 +83,8 @@ const sendErrorProd = (err, req, res) => {
   // B) программаня ошибка
   console.error("ERROR", err);
   return res.status(err.statusCode).render("pages/error", {
-    title: "Something went wrong!",
-    msg: "Please try again later.",
+    title: "Что-то пошло очень не так!",
+    msg: "Пожалуйста, попробуйте позже.",
     statusCode: err.statusCode,
   });
 };

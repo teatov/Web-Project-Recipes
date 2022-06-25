@@ -8,6 +8,7 @@ const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+const cors = require("cors");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -24,6 +25,9 @@ app.enable("trust proxy");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+app.use(cors());
+app.options("*", cors());
 
 // ПРОМЕЖУТОЧНОЕ ПО
 // статичные файлы
@@ -43,7 +47,7 @@ app.use(
   rateLimit({
     max: 100,
     windowMs: 60 * 60 * 1000,
-    message: "Too many requests from this IP, please try again later.",
+    message: "Слишком много запросов от этого IP, попробуйте позже.",
   })
 );
 
@@ -72,7 +76,7 @@ app.use("/api/v1/bookmarks", bookmarkRouter);
 app.use("/", viewRouter);
 
 app.all("*", (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  next(new AppError(`Страница ${req.originalUrl} не найдена!`, 404));
 });
 
 app.use(globalErrorHandler);

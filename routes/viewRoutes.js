@@ -13,21 +13,29 @@ router.get("/recipes/:slug", viewController.getRecipe);
 router.get("/login", viewController.getLoginForm);
 router.get("/signup", viewController.getSignupForm);
 
-router.use(authController.protect);
-
 router.get("/me", authController.protect, viewController.getAccount);
-router.get("/createRecipe", viewController.getRecipeForm);
+router.get(
+  "/createRecipe",
+  authController.protect,
+  viewController.getRecipeForm
+);
 
 router.get(
   "/recipes/:slug/edit",
+  authController.protect,
   viewController.restrictToAuthor,
   viewController.getRecipeEditForm
 );
 
-router.post("/submit-user-data", viewController.updateUserData);
+router.post(
+  "/submit-user-data",
+  authController.protect,
+  viewController.updateUserData
+);
 
 router.get(
   "/administration",
+  authController.protect,
   authController.restrictTo("admin"),
   viewController.getAdminPage
 );

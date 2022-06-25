@@ -4,7 +4,7 @@ const commentSchema = new mongoose.Schema(
   {
     text: {
       type: String,
-      required: [true, "Comment can not be empty!"],
+      required: [true, "Комментарий не может быть пустым!"],
     },
     createdAt: {
       type: Date,
@@ -13,12 +13,12 @@ const commentSchema = new mongoose.Schema(
     recipe: {
       type: mongoose.Schema.ObjectId,
       ref: "Recipe",
-      required: [true, "Comment must belong to a recipe"],
+      required: [true, "Комментарий должен принадлежать рецепту"],
     },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: [true, "Comment must belong to a user"],
+      required: [true, "Комментарий должен принадлежать пользователю"],
     },
   },
   {

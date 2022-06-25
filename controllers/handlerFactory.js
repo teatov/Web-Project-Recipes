@@ -9,7 +9,6 @@ const Recipe = require("../models/recipeModel");
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
     let doc;
-    console.log(req.body);
     if (req.body.slug) {
       doc = await Model.findOneAndDelete({ slug: req.body.slug });
     } else {
@@ -17,7 +16,7 @@ exports.deleteOne = (Model) =>
     }
 
     if (!doc) {
-      return next(new AppError("No document found with that ID", 404));
+      return next(new AppError("Документ с таким ID не найден", 404));
     }
 
     if (doc.slug) {
@@ -25,7 +24,6 @@ exports.deleteOne = (Model) =>
         `public/img/recipes/recipe-${doc._id}*.jpeg`,
         {},
         function (er, files) {
-          console.log(files);
           files.forEach((file) => {
             fs.unlinkSync(path.join(__dirname, `../${file}`));
           });
@@ -35,7 +33,6 @@ exports.deleteOne = (Model) =>
 
     if (doc.email) {
       glob(`public/img/users/user-${doc._id}*.jpeg`, {}, function (er, files) {
-        console.log(files);
         files.forEach((file) => {
           fs.unlinkSync(path.join(__dirname, `../${file}`));
         });
@@ -52,7 +49,6 @@ exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
     let doc;
     if (req.body.slug) {
-      console.log("111fgdfg", req.body.slug);
       doc = await Model.findOneAndUpdate({ slug: req.body.slug }, req.body, {
         new: true,
         runValidators: true,
@@ -65,7 +61,7 @@ exports.updateOne = (Model) =>
     }
 
     if (!doc) {
-      return next(new AppError("No document found with that ID", 404));
+      return next(new AppError("Документ с таким ID не найден", 404));
     }
 
     res.status(200).json({
@@ -82,7 +78,6 @@ exports.createOne = (Model) =>
       const recipe = await Recipe.findOne({ slug: req.body.slug });
       req.body.recipe = String(recipe._id);
     }
-    console.log(req.body);
     const doc = await Model.create(req.body);
 
     res.status(201).json({
@@ -106,7 +101,7 @@ exports.getOne = (Model, popOptions) =>
     const doc = await query;
 
     if (!doc) {
-      return next(new AppError("No document found with that ID", 404));
+      return next(new AppError("Документ с таким ID не найден", 404));
     }
 
     res.status(200).json({
@@ -141,20 +136,20 @@ exports.getAll = (Model) =>
 exports.restrictToAuthor = (Model) =>
   catchAsync(async (req, res, next) => {
     let doc;
-    console.log("11111111", Model, req.body, req.params);
     if (req.params.slug) {
       doc = await Model.findOne({ slug: req.params.slug });
     } else {
       doc = await Model.findById(req.params.id);
     }
-    console.log(doc);
 
     if (
       doc &&
       req.user.role !== "admin" &&
       req.user.id !== String(doc.user._id)
     ) {
-      return next(new AppError("Only author can perform this!", 403));
+      return next(
+        new AppError("Только автору разрешено выполнять это действие!", 403)
+      );
     }
     next();
   });

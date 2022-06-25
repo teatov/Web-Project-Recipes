@@ -4,12 +4,12 @@ const bookmarkSchema = new mongoose.Schema({
   recipe: {
     type: mongoose.Schema.ObjectId,
     ref: "Recipe",
-    required: [true, "Bookmark must belong to a Recipe!"],
+    required: [true, "Закладка должна принадлежать рецепту!"],
   },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
-    required: [true, "Bookmark must belong to a User!"],
+    required: [true, "Закладка должна принадлежать пользователю!"],
   },
 });
 

@@ -10,7 +10,7 @@ export const deleteRecipe = async function (slug) {
       data: { slug },
     });
 
-    showAlert("success", "Recipe deleted");
+    showAlert("success", "Рецепт удалён");
     location.reload();
   } catch (err) {
     showAlert("error", err.response.data.message);
@@ -103,7 +103,7 @@ export const createRecipe = async function (requestType, slug) {
 
     showAlert(
       "success",
-      requestType === "POST" ? "Recipe created" : "Recipe updated"
+      requestType === "POST" ? "Рецепт создан" : "Рецепт обновлён"
     );
     location.assign(`/recipes/${res.data.data.data.slug}`);
   } catch (err) {
@@ -153,7 +153,7 @@ export const searchRecipe = function (search) {
 
 export const copyLink = function () {
   navigator.clipboard.writeText(window.location.href);
-  showAlert("success", "Link copied!");
+  showAlert("success", "Ссылка скопирована!");
 };
 
 export const addToBookmarks = async function (id) {
@@ -164,7 +164,7 @@ export const addToBookmarks = async function (id) {
       data: { recipe: id },
     });
 
-    showAlert("success", "Recipe added to your bookmarks");
+    showAlert("success", "Рецепт добавлен в ваши закладки");
   } catch (err) {
     showAlert("error", err.response.data.message);
   }
@@ -176,7 +176,7 @@ export const deleteBookmark = async function (id) {
       url: `/api/v1/bookmarks/${id}`,
     });
 
-    showAlert("success", "Recipe deleted from your bookmarks");
+    showAlert("success", "Рецепт удалён из закладок");
     location.reload();
   } catch (err) {
     showAlert("error", err.response.data.message);

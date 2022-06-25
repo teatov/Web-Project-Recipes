@@ -42,24 +42,23 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const url = `${req.protocol}://${req.get("host")}/me`;
-  await new Email(newUser, url).sendWelcome();
+  // const url = `${req.protocol}://${req.get("host")}/me`;
+  // await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
   // 1) Проверка если пароль или почта существуют
   if (!email || !password) {
-    return next(new AppError("Please provide email and password!", 400));
+    return next(new AppError("Пожалуйста, введите почту и пароль!", 400));
   }
   // 2) Проверка если пользователь существиет и пароль корректен
   const user = await User.findOne({ email }).select("+password");
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Incorrect email or password", 401));
+    return next(new AppError("Неверная почта или пароль", 401));
   }
 
   // 3) Если всё ок, отправляем токен клиенту
@@ -88,7 +87,10 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   if (!token) {
     return next(
-      new AppError("You are not logged in! Please log in to get access.", 401)
+      new AppError(
+        "Вы не авторизированы! Пожалуйста, войдите в учётную запись.",
+        401
+      )
     );
   }
 
@@ -99,17 +101,17 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
-      new AppError(
-        "The user belonging to this token does no longer exist.",
-        401
-      )
+      new AppError("Пользователь с этим токеном больше не существует.", 401)
     );
   }
 
   // 4) Проверяем, если пользователь сменил пароль после того как был выдан токен
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError("User recently changed password! Please log in again.", 401)
+      new AppError(
+        "Пароль пользователя был изменён! Выполните вход ещё раз.",
+        401
+      )
     );
   }
 
@@ -154,9 +156,7 @@ exports.isLoggedIn = async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError("You do not have permission to perform this action", 403)
-      );
+      return next(new AppError("У вас нет полномочий для этого действия", 403));
     }
 
     next();
@@ -167,7 +167,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Найти пользователя
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new AppError("There is no user with email address.", 404));
+    return next(
+      new AppError("Пользователя с такой почтой не существует.", 404)
+    );
   }
 
   // 2) Сгенерировать рандомный токен сброса пароля
@@ -183,17 +185,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: "Token sent to email!",
+      message: "Токен отправлен на почту!",
     });
   } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
 
-    return next(
-      new AppError("There was an error sending the email. Try again later!"),
-      500
-    );
+    return next(new AppError("При отправке письма возникла ошибка"), 500);
   }
 });
 
@@ -211,7 +210,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 2) Если токен не истёк и пользователь существует, назначаем новый пароль
   if (!user) {
-    return next(new AppError("Token is invalid or has expired", 400));
+    return next(new AppError("Токен некорректен или его срок истёк", 400));
   }
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
@@ -230,7 +229,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 2) Проверяем если отправленный текущий пароль корректен
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-    return next(new AppError("Your current password is wrong.", 401));
+    return next(new AppError("Неверный текущий пароль.", 401));
   }
 
   // 3) Если да, то обновляем пароль

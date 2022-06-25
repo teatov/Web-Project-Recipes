@@ -14,7 +14,7 @@ export const login = async (email, password) => {
     });
 
     if (res.data.status === "success") {
-      showAlert("success", "Logged in successfully!");
+      showAlert("success", "Вход успешно выполнен!");
       location.assign("/");
     }
   } catch (err) {
@@ -33,7 +33,7 @@ export const logout = async () => {
     }
   } catch (err) {
     console.log(err.response);
-    showAlert("error", "Error logging out! Try again.");
+    showAlert("error", "При выходе возникла ошибка.");
   }
 };
 
@@ -51,7 +51,7 @@ export const signup = async (name, email, password, passwordConfirm) => {
     });
 
     if (res.data.status === "success") {
-      showAlert("success", "Signed up successfully!");
+      showAlert("success", "Регистрация выполнена успешно!");
       location.assign("/");
     }
   } catch (err) {
@@ -66,7 +66,7 @@ export const deleteMe = async () => {
       url: "/api/v1/users/deleteMe",
     });
 
-    showAlert("success", "Deleted account successfully!");
+    showAlert("success", "Учётная запись успешно удалена!");
     location.assign("/");
   } catch (err) {
     showAlert("error", err.response.data.message);

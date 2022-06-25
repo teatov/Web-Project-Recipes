@@ -13,7 +13,7 @@ export const createComment = async function (text, slug) {
       },
     });
 
-    showAlert("success", "Comment sent");
+    showAlert("success", "Комментарий отправлен");
     location.reload();
   } catch (err) {
     showAlert("error", err.response.data.message);

@@ -17,7 +17,12 @@ export const updateSettings = async (data, type) => {
     });
 
     if (res.data.status === "success") {
-      showAlert("success", `${type.toUpperCase()} updated successfully!`);
+      showAlert(
+        "success",
+        type === "password"
+          ? "Пароль успешно обновлён!"
+          : "Данные успешно обновлены!"
+      );
     }
     location.reload();
   } catch (err) {

@@ -56,7 +56,6 @@ class APIFeatures {
         .replace(/\s+/g, " ")
         .replaceAll("+", " ");
       const searchRegex = `(${search.replaceAll(" ", "|")})`;
-      console.log(search, searchRegex);
       this.query = this.query.find({
         $or: [
           { name: { $regex: searchRegex, $options: "i" } },

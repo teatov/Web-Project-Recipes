@@ -11,7 +11,7 @@ const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
-    cb(new AppError("Not an image! Please upload only images.", 400), false);
+    cb(new AppError("Пожалуйста, загружайте только изображения.", 400), false);
   }
 };
 
@@ -26,7 +26,6 @@ exports.uploadRecipeImages = upload.fields([
 ]);
 
 exports.processRecipeImages = catchAsync(async (req, res, next) => {
-  console.log("!!!!!!!!", req.files);
   if (!req.files) return next();
 
   if (req.files.imageCover) {
@@ -41,7 +40,6 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
     req.body.steps = [];
     await Promise.all(
       req.body.stepNumbers.map(async (n, i) => {
-        console.log(n, i, Number(n) === i);
         if (Number(n) === i) {
           const filename = `recipe-${
             req.body.idRecipe
@@ -58,7 +56,6 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
             number: Number(n) + 1,
             text: req.body.stepTexts[i],
           });
-          console.log(req.body, n, i);
         } else {
           req.files.stepImage.splice(i, 0, "");
           req.body.steps.push({
