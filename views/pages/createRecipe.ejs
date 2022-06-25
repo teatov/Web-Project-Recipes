@@ -37,12 +37,11 @@
             <h3>Название:</h3>
             <input type="text" id="name" value="<%= recipe?.name %>" />
             <h3>Блюдо:</h3>
-            <input list="dish-type">
-              <datalist id="dish-type">
+              <select id="dish-type">
               <% dishTypes.forEach((type) => { type.categories.forEach((category) => { let string = `${type.name}/${category.name}`; %><option value="<%= string %>" <%= recipe && !recipe.subcategory && category.name === recipe.category ? 'selected="selected"' : "" %> ><%= string %></option><%  category.subcategories.forEach((subcategory) => { string = `${type.name}/${category.name}/${subcategory.name}` %>
               <option value="<%= string %>" <%= recipe && recipe.subcategory && subcategory.name === recipe.subcategory ? 'selected="selected"' : "" %> ><%= string %></option>
               <% })})}) %>
-            </вф>
+            </select>
           </div>
           <div class="flex flex-column">
             <h3>Фотография:</h3>
