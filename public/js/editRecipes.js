@@ -84,7 +84,6 @@ export const createRecipe = async function (requestType, slug) {
     ingredients,
     steps,
   };
-  console.log(recipe, form, "111111111111", slug);
   if (slug) {
     recipe.slug = slug;
   }
@@ -113,11 +112,6 @@ export const createRecipe = async function (requestType, slug) {
 
 export const addElement = function (el, html) {
   el.insertAdjacentHTML("beforebegin", html);
-  console.log(
-    el,
-    el.previousElementSibling,
-    el.previousElementSibling.querySelector("button")
-  );
 };
 
 export const removeElement = function (el) {
@@ -128,7 +122,6 @@ export const searchRecipe = function (search) {
   const contains = search || document.getElementById("contains").value;
   const dishType = document.getElementById("dish-type")?.value;
   const sortBy = document.getElementById("sort")?.value;
-  console.log(contains, dishType, sortBy);
 
   const query = {};
   if (contains) {
@@ -147,7 +140,6 @@ export const searchRecipe = function (search) {
   }
 
   const params = new URLSearchParams(query);
-  console.log(query, params.toString());
   location.assign(`/recipes?${params.toString()}`);
 };
 

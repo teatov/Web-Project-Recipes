@@ -148,7 +148,6 @@ if (recipeDeleteBtns) {
 if (sendCommentBtn) {
   sendCommentBtn.addEventListener("click", () => {
     const commentText = document.querySelector(".comment-text").value;
-    console.log(commentText);
     createComment(commentText, sendCommentBtn.dataset.recipe);
     document.querySelector(".comment-text").value = "";
   });
@@ -186,7 +185,6 @@ if (addIngredientBtn) {
     addIngredientBtn.parentElement.previousElementSibling
       .querySelector("button")
       .addEventListener("click", function () {
-        console.log(this.parentElement);
         removeElement(this);
       });
   });
@@ -219,7 +217,6 @@ if (addStepBtn) {
     addStepBtn.parentElement.previousElementSibling
       .querySelector("button")
       .addEventListener("click", function () {
-        console.log(this.parentElement);
         removeElement(this);
       });
   });
@@ -227,7 +224,6 @@ if (addStepBtn) {
 
 if (removeIngredientBtns) {
   removeIngredientBtns.forEach((el) => {
-    console.log(el);
     el.addEventListener("click", () => removeElement(el));
   });
 }

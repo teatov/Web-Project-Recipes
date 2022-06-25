@@ -48,11 +48,10 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
     req.body.steps = [];
     await Promise.all(
       req.body.stepNumbers.map(async (n, i) => {
-        if (Number(n) === i) {
+        if (Number(n) === i && n) {
           const filename = `recipe-${
             req.body.idRecipe
           }-${Date.now()}-${i}.jpeg`;
-
           await sharp(req.files.stepImage[i].buffer)
             .resize(2000, 1333, { withoutEnlargement: true })
             .toFormat("jpeg")
@@ -71,7 +70,6 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
         } else {
           req.files.stepImage.splice(i, 0, "");
           req.body.steps.push({
-            image: null,
             number: i + 1,
             text: req.body.stepTexts[i],
           });

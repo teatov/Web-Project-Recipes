@@ -24,7 +24,6 @@ addTypeBtn.addEventListener("click", async (e) => {
 deleteTypeBtns.forEach((el) => {
   el.addEventListener("click", async (e) => {
     e.preventDefault();
-    console.log(el.parentElement.dataset.id);
     await axios({
       method: "DELETE",
       url: `/api/v1/dishTypes/${el.parentElement.dataset.id}`,

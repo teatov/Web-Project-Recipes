@@ -32,7 +32,6 @@ export const logout = async () => {
       window.location.pathname = "/";
     }
   } catch (err) {
-    console.log(err.response);
     showAlert("error", "При выходе возникла ошибка.");
   }
 };
