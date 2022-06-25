@@ -18,6 +18,8 @@ export const deleteRecipe = async function (slug) {
 };
 
 export const createRecipe = async function (requestType, slug) {
+  const form = new FormData();
+  form.append("imageCover", document.getElementById("image").files[0]);
   const name = document.getElementById("name").value;
   const dishTypeSelect = document.getElementById("dish-type").value.split("/");
   const description = document.getElementById("description").value;
@@ -30,21 +32,28 @@ export const createRecipe = async function (requestType, slug) {
   const ingredientAmounts = [
     ...document.querySelectorAll(".ingredients-amount"),
   ];
-  const ingredients = ingredientNames.map((el, i) => {
+  const ingredients = [];
+  ingredientNames.forEach((el, i) => {
     if (el.value) {
-      return { name: el.value, amount: ingredientAmounts[i].value.trim() };
+      ingredients.push({
+        name: el.value,
+        amount: ingredientAmounts[i].value.trim(),
+      });
     }
-    return null;
   });
 
   const stepTexts = [...document.querySelectorAll(".steps-text")];
+  const stepImages = [...document.querySelectorAll(".steps-image")];
   let number = 0;
-  const steps = stepTexts.map((el, i) => {
+  const steps = [];
+  stepTexts.forEach((el, i) => {
     if (el.value) {
       number++;
-      return { text: el.value, number };
+      steps.push({ text: el.value, number });
+      form.append("stepImage", stepImages[i].files[0]);
+      form.append("stepNumbers", stepImages[i].files[0] ? i : "");
+      form.append("stepTexts", el.value);
     }
-    return null;
   });
 
   const dishType = dishTypeSelect[0];
@@ -75,15 +84,27 @@ export const createRecipe = async function (requestType, slug) {
     ingredients,
     steps,
   };
-  console.log(recipe, "111111111111", slug);
+  console.log(recipe, form, "111111111111", slug);
+  if (slug) {
+    recipe.slug = slug;
+  }
   try {
     const res = await axios({
       method: requestType,
       url: `/api/v1/recipes/`,
-      data: { ...recipe, slug },
+      data: recipe,
+    });
+    form.append("idRecipe", res.data.data.data._id);
+    await axios({
+      method: "PATCH",
+      url: `/api/v1/recipes/${res.data.data.data._id}`,
+      data: form,
     });
 
-    showAlert("success", "Recipe created");
+    showAlert(
+      "success",
+      requestType === "POST" ? "Recipe created" : "Recipe updated"
+    );
     location.assign(`/recipes/${res.data.data.data.slug}`);
   } catch (err) {
     showAlert("error", err.response.data.message);
@@ -128,4 +149,40 @@ export const searchRecipe = function (search) {
   const params = new URLSearchParams(query);
   console.log(query, params.toString());
   location.assign(`/recipes?${params.toString()}`);
+};
+
+export const copyLink = function () {
+  navigator.clipboard.writeText(window.location.href);
+  showAlert("success", "Link copied!");
+};
+
+export const addToBookmarks = async function (id) {
+  try {
+    await axios({
+      method: "POST",
+      url: `/api/v1/bookmarks`,
+      data: { recipe: id },
+    });
+
+    showAlert("success", "Recipe added to your bookmarks");
+  } catch (err) {
+    showAlert("error", err.response.data.message);
+  }
+};
+export const deleteBookmark = async function (id) {
+  try {
+    await axios({
+      method: "DELETE",
+      url: `/api/v1/bookmarks/${id}`,
+    });
+
+    showAlert("success", "Recipe deleted from your bookmarks");
+    location.reload();
+  } catch (err) {
+    showAlert("error", err.response.data.message);
+  }
+};
+
+export const printRecipe = function () {
+  window.print();
 };

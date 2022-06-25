@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', {title: "Администрирование"}); %>
+    <script type="module" defer src="/js/bundled/admin.js"></script>
+  </head>
+  <body>
+    <div class="content">
+      <%- include('../partials/header'); %>
+      <h2>Категории</h2>
+      <input id="new-type-name" type="text" />
+      <ol>
+        <a class="type-add" href="">[+]</a>
+        <% dishTypes.forEach((type) => { %>
+        <li data-id="<%= type._id %>">
+          <%= type.name %> <a class="type-delete" href="">[X]</a>
+          <a class="category-add" href="">[+]</a>
+        </li>
+        <ol data-id="<%= type._id %>">
+          <% type.categories.forEach((category) => { %>
+          <li data-id="<%= category._id %>">
+            <%= category.name %> <a class="category-delete" href="">[X]</a>
+            <a class="subcategory-add" href="">[+]</a>
+          </li>
+          <ol data-id="<%= category._id %>">
+            <% category.subcategories.forEach((subcategory) => { %>
+            <li data-id="<%= subcategory._id %>">
+              <%= subcategory.name %>
+              <a class="subcategory-delete" href="">[X]</a>
+            </li>
+            <% }) %>
+          </ol>
+          <% }) %>
+        </ol>
+        <% }) %>
+      </ol>
+    </div>
+    <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
+  </body>
+</html>

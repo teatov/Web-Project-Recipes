@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable node/no-missing-import */
 /* eslint-disable import/no-unresolved */
-import { login, logout, signup } from "./auth";
+import { login, logout, signup, deleteMe } from "./auth";
 import { updateSettings } from "./updateSettings";
 import { openModalImage, zoomModalImage, closeModal } from "./modal";
 import {
@@ -10,6 +10,10 @@ import {
   addElement,
   removeElement,
   searchRecipe,
+  copyLink,
+  addToBookmarks,
+  printRecipe,
+  deleteBookmark,
 } from "./editRecipes";
 import { createComment } from "./comments";
 
@@ -25,6 +29,7 @@ const btnCloseModal = document.querySelector(".modal button");
 const modalContainerImage = document.querySelector(".modal img");
 const modal = document.querySelector(".modal");
 const recipeDeleteBtns = document.querySelectorAll(".delete-recipe");
+const bookmarkDeleteBtns = document.querySelectorAll(".delete-bookmark");
 const sendCommentBtn = document.querySelector(".send-comment");
 const recipeCreateForm = document.querySelector(".recipe-create-form");
 const addIngredientBtn = document.querySelector(".add-ingredient");
@@ -34,6 +39,10 @@ const removeStepBtns = document.querySelectorAll(".remove-step");
 const recipeUpdateForm = document.querySelector(".recipe-update-form");
 const searchHeader = document.querySelector(".search-header");
 const searchForm = document.querySelector(".search-form");
+const shareBtn = document.querySelector(".share-btn");
+const bookmarkBtn = document.querySelector(".bookmark-btn");
+const printBtn = document.querySelector(".print-btn");
+const deleteUserBtn = document.querySelector(".delete-user");
 
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
@@ -48,6 +57,12 @@ if (logOutBtn) {
   logOutBtn.addEventListener("click", (e) => {
     e.preventDefault();
     logout();
+  });
+}
+if (deleteUserBtn) {
+  deleteUserBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    deleteMe();
   });
 }
 
@@ -65,9 +80,11 @@ if (signupForm) {
 if (userDataForm) {
   userDataForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    updateSettings({ name, email }, "data");
+    const form = new FormData();
+    form.append("name", document.getElementById("name").value);
+    form.append("email", document.getElementById("email").value);
+    form.append("photo", document.getElementById("photo").files[0]);
+    updateSettings(form, "data");
   });
 }
 
@@ -152,14 +169,12 @@ if (addIngredientBtn) {
       `<div class="flex justify-space-between align-flex-end">
       <textarea
         class="flex-grow comment-text ingredients-name"
-        name=""
         rows="1"
       ></textarea>
       <div>
         <h3>Количество:</h3>
         <input
           type="text"
-          name=""
           class="ingredients-amount input-narrow no-flex-grow"
         />
       </div>
@@ -184,21 +199,17 @@ if (addStepBtn) {
       `<div class="flex justify-space-between align-flex-end">
       <textarea
         class="flex-grow comment-text steps-text"
-        name=""
         rows="1"
       ></textarea>
       <div class="flex flex-column">
         <h3>Фотография:</h3>
-        <label for="image" class="file-upload btn">
-          <span class="icon icon--plus"></span>
-          Загрузить файл...
-        </label>
         <input
-          type="file"
-          accept="image/png, image/jpg, image/gif, image/jpeg"
-          name=""
-          class="steps-images"
-        />
+            type="file"
+            accept="image/*"
+            name="stepImage"
+            id="image-1"
+            class="file-upload-input steps-image"
+          />
       </div>
       <button type="button" class="bg-orange remove-step">
         <span class="icon icon--cross"></span>
@@ -247,5 +258,28 @@ if (searchForm) {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     searchRecipe();
+  });
+}
+
+if (shareBtn) {
+  shareBtn.addEventListener("click", () => {
+    copyLink();
+  });
+}
+if (bookmarkBtn) {
+  bookmarkBtn.addEventListener("click", function () {
+    addToBookmarks(this.dataset.id);
+  });
+}
+if (bookmarkDeleteBtns) {
+  bookmarkDeleteBtns.forEach(function (el) {
+    el.addEventListener("click", function () {
+      deleteBookmark(this.dataset.id);
+    });
+  });
+}
+if (printBtn) {
+  printBtn.addEventListener("click", () => {
+    printRecipe();
   });
 }

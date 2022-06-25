@@ -70,7 +70,8 @@
       <section>
         <ul class="list-narrow">
           <h2>ПОШАГОВЫЙ РЕЦЕПТ:</h2>
-          <% recipe.steps.forEach((step) => { %>
+          <% recipe.steps.sort((a, b) => { return a.number - b.number;
+          }).forEach((step) => { %>
           <li class="flex flex-responsive">
             <% if (step.image) {%>
             <img
@@ -96,28 +97,20 @@
         <h3>КЛЮЧЕВЫЕ СЛОВА:</h3>
         <ul class="tags">
           <% recipe.tags.forEach((tag) => { %>
-          <li><a href="#"><%= tag %></a></li>
+          <li><a href="/recipes?search=<%= tag.replaceAll(" ", "+") %>"><%= tag %></a></li>
           <% }) %>
         </ul>
         <div class="flex justify-space-between flex-responsive">
           <div class="flex u-justify-center buttons-responsive">
-            <a href="#" class="btn bg-yellow"
-              ><span class="icon icon--share"></span>Поделиться</a
+            <a class="btn bg-yellow share-btn"
+              ><span class="icon icon--share "></span>Поделиться</a
             >
-            <!-- <div class="flex u-justify-center">
-              <a href="#" class="btn bg-green"
-                ><span class="icon icon--thumb-up"></span><%= recipe.likes %></a
-              >
-              <a href="#" class="btn bg-orange"
-                ><span class="icon icon--thumb-down"></span><%= recipe.dislikes %></a
-              >
-            </div> -->
           </div>
           <div class="flex u-justify-center buttons-responsive">
-            <a href="#" class="btn bg-green"
-              ><span class="icon icon--bookmark"></span>В закладки</a
+            <a class="btn bg-green bookmark-btn" data-id="<%= recipe._id %>"
+              ><span class="icon icon--bookmark" ></span>В закладки</a
             >
-            <a href="#" class="btn bg-yellow"
+            <a class="btn bg-yellow print-btn"
               ><span class="icon icon--print"></span>Распечатать</a
             >
           </div>
@@ -141,17 +134,19 @@
             </div>
           </li>
           <% }) %>
-          <div class="divider"></div>
-          <h2>НАПИСАТЬ КОММЕНТАРИЙ:</h2>
-            <textarea
-              class="flex-grow comment-text"
-              
-              id=""
-              rows="5"
-            ></textarea>
-          <div class="flex justify-flex-end">
-            <button data-recipe="<%= recipe.slug %>" class="bg-green send-comment"><span class="icon icon--comment"></span>Отправить комментарий</button>
-          </div>
+          <% if (locals.user) { %>
+            <div class="divider"></div>
+            <h2>НАПИСАТЬ КОММЕНТАРИЙ:</h2>
+              <textarea
+                class="flex-grow comment-text"
+                
+                id=""
+                rows="5"
+              ></textarea>
+            <div class="flex justify-flex-end">
+              <button data-recipe="<%= recipe.slug %>" class="bg-green send-comment"><span class="icon icon--comment"></span>Отправить комментарий</button>
+            </div>
+            <% } %>
         </ul>
         <div class="divider"></div>
       </section>

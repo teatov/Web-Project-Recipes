@@ -1,7 +1,42 @@
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
+const sharp = require("sharp");
+const glob = require("glob");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const factory = require("./handlerFactory");
+
+const multerStorage = multer.memoryStorage();
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image! Please upload only images.", 400), false);
+  }
+};
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserPhoto = upload.single("photo");
+
+exports.processUserPhoto = catchAsync(async (req, res, next) => {
+  console.log("!!!!!!!!", req.file);
+  if (!req.file) return next();
+
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+  await sharp(req.file.buffer)
+    .resize(128, 128)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+});
 
 function filterObj(obj, ...allowedFields) {
   const newObj = {};
@@ -23,6 +58,22 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   const filteredBody = filterObj(req.body, "name", "email");
+
+  if (req.file) {
+    filteredBody.photo = req.file.filename;
+
+    glob(
+      `public/img/users/user-${req.user.id}*.jpeg`,
+      {},
+      function (er, files) {
+        files.forEach((file) => {
+          if (file.replace("public/img/users/", "") !== req.file.filename) {
+            fs.unlinkSync(path.join(__dirname, `../${file}`));
+          }
+        });
+      }
+    );
+  }
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,

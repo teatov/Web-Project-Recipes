@@ -7,6 +7,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -14,9 +15,12 @@ const recipeRouter = require("./routes/recipeRoutes");
 const userRouter = require("./routes/userRoutes");
 const commentRouter = require("./routes/commentRoutes");
 const dishTypeRouter = require("./routes/dishTypeRoutes");
+const bookmarkRouter = require("./routes/bookmarkRoutes");
 const viewRouter = require("./routes/viewRoutes");
 
 const app = express();
+
+app.enable("trust proxy");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -57,11 +61,14 @@ app.use(xss());
 // Предотвращение загрязнения параметрами
 app.use(hpp());
 
+app.use(compression());
+
 // МАРШРУТЫ
 app.use("/api/v1/recipes", recipeRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/dishTypes", dishTypeRouter);
+app.use("/api/v1/bookmarks", bookmarkRouter);
 app.use("/", viewRouter);
 
 app.all("*", (req, res, next) => {

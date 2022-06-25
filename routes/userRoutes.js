@@ -12,12 +12,17 @@ router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
 
 // требовать авторизацию на всех следующих маршрутах
-// router.use(authController.protect);
+router.use(authController.protect);
 
 router.patch("/updateMyPassword", authController.updatePassword);
 
 router.get("/me", userController.getMe, userController.getUser);
-router.patch("/updateMe", userController.updateMe);
+router.patch(
+  "/updateMe",
+  userController.uploadUserPhoto,
+  userController.processUserPhoto,
+  userController.updateMe
+);
 router.delete("/deleteMe", userController.deleteMe);
 
 // разрешить следующие маршруты только админам

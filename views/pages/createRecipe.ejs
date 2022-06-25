@@ -45,15 +45,13 @@
           </div>
           <div class="flex flex-column">
             <h3>Фотография:</h3>
-            <label for="image" class="file-upload btn">
-              <span class="icon icon--plus"></span>
-              Загрузить файл...
-            </label>
             <input
-              type="file"
-              accept="image/png, image/jpg, image/gif, image/jpeg"
-              id="image"
-            />
+                type="file"
+                accept="image/*"
+                id="image"
+                name="imageCover"
+                class="file-upload-input"
+              />
           </div>
           <div class="flex flex-column flex-grow">
             <h3>Описание:</h3>
@@ -143,15 +141,12 @@
             ></textarea>
             <div class="flex flex-column">
               <h3>Фотография:</h3>
-              <label for="image" class="file-upload btn">
-                <span class="icon icon--plus"></span>
-                Загрузить файл...
-              </label>
               <input
-                type="file"
-                accept="image/png, image/jpg, image/gif, image/jpeg"
-                class="steps-images"
-              />
+                  type="file"
+                  accept="image/*"
+                  name="stepImage"
+                  class="file-upload-input steps-image"
+                />
             </div>
             <button type="button" class="bg-orange remove-step">
               <span class="icon icon--cross"></span>
@@ -165,15 +160,12 @@
             >
             <div class="flex flex-column">
               <h3>Фотография:</h3>
-              <label for="image" class="file-upload btn">
-                <span class="icon icon--plus"></span>
-                Загрузить файл...
-              </label>
               <input
-                type="file"
-                accept="image/png, image/jpg, image/gif, image/jpeg"
-                class="steps-images"
-              />
+                  type="file"
+                  accept="image/*"
+                  name="stepImage"
+                  class="file-upload-input steps-image"
+                />
             </div>
             <button type="button" class="bg-orange remove-step">
               <span class="icon icon--cross"></span>

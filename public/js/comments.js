@@ -14,9 +14,7 @@ export const createComment = async function (text, slug) {
     });
 
     showAlert("success", "Comment sent");
-    window.setTimeout(() => {
-      location.reload();
-    }, 1500);
+    location.reload();
   } catch (err) {
     showAlert("error", err.response.data.message);
   }

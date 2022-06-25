@@ -1,8 +1,8 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable import/prefer-default-export */
 import axios from "axios";
 import { showAlert } from "./alerts";
 
-// type is either 'password' or 'data'
 export const updateSettings = async (data, type) => {
   try {
     const url =
@@ -19,6 +19,7 @@ export const updateSettings = async (data, type) => {
     if (res.data.status === "success") {
       showAlert("success", `${type.toUpperCase()} updated successfully!`);
     }
+    location.reload();
   } catch (err) {
     showAlert("error", err.response.data.message);
   }

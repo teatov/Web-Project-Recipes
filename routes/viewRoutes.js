@@ -26,4 +26,10 @@ router.get(
 
 router.post("/submit-user-data", viewController.updateUserData);
 
+router.get(
+  "/administration",
+  authController.restrictTo("admin"),
+  viewController.getAdminPage
+);
+
 module.exports = router;

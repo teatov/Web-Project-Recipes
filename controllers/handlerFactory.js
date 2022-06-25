@@ -1,3 +1,6 @@
+const path = require("path");
+const fs = require("fs");
+const glob = require("glob");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
@@ -17,24 +20,36 @@ exports.deleteOne = (Model) =>
       return next(new AppError("No document found with that ID", 404));
     }
 
+    if (doc.slug) {
+      glob(
+        `public/img/recipes/recipe-${doc._id}*.jpeg`,
+        {},
+        function (er, files) {
+          console.log(files);
+          files.forEach((file) => {
+            fs.unlinkSync(path.join(__dirname, `../${file}`));
+          });
+        }
+      );
+    }
+
+    if (doc.email) {
+      glob(`public/img/users/user-${doc._id}*.jpeg`, {}, function (er, files) {
+        console.log(files);
+        files.forEach((file) => {
+          fs.unlinkSync(path.join(__dirname, `../${file}`));
+        });
+      });
+    }
+
     res.status(204).json({
       status: "success",
       data: null,
     });
   });
 
-exports.updateOne = (Model, options) =>
+exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    if (options.restrictFields && req.user.role !== "admin") {
-      options.restrictFields.forEach((field) => {
-        if (Object.prototype.hasOwnProperty.call(req.body, field)) {
-          return next(
-            new AppError("You are not permitted to update those fields", 400)
-          );
-        }
-      });
-    }
-
     let doc;
     if (req.body.slug) {
       console.log("111fgdfg", req.body.slug);

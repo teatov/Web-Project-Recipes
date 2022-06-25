@@ -191,11 +191,12 @@ select:active {
 }
 
 input[type="file"] {
-  display: none;
+  width: 14rem;
 }
 
 .file-upload {
   cursor: pointer;
+  width: 11rem;
 }
 
 div.btn {

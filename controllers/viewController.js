@@ -1,6 +1,7 @@
 const Recipe = require("../models/recipeModel");
 const User = require("../models/userModel");
 const DishType = require("../models/dishTypeModel");
+const Bookmark = require("../models/bookmarkModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
@@ -77,7 +78,13 @@ exports.getAccount = catchAsync(async (req, res, next) => {
     .limitFields();
 
   const userRecipes = await features.query;
-  res.status(200).render("pages/account", { userRecipes });
+
+  const bookmarks = await Bookmark.find({ user: req.user.id }).populate({
+    path: "recipe",
+    fields: "name description slug",
+  });
+
+  res.status(200).render("pages/account", { userRecipes, bookmarks });
 });
 
 exports.getRecipeForm = catchAsync(async (req, res, next) => {
@@ -202,6 +209,11 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
   res.status(200).render("pages/account", {
     user: updatedUser,
   });
+});
+
+exports.getAdminPage = catchAsync(async (req, res, next) => {
+  const dishTypes = await DishType.find();
+  res.status(200).render("pages/admin", { dishTypes });
 });
 
 exports.restrictToAuthor = factory.restrictToAuthor(Recipe);

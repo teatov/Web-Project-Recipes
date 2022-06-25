@@ -27,7 +27,11 @@ router
 
 router
   .route("/:id")
-  .patch(recipeController.updateRecipe)
+  .patch(
+    recipeController.uploadRecipeImages,
+    recipeController.processRecipeImages,
+    recipeController.updateRecipe
+  )
   .delete(recipeController.deleteRecipe);
 
 module.exports = router;

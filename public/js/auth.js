@@ -58,3 +58,17 @@ export const signup = async (name, email, password, passwordConfirm) => {
     showAlert("error", err.response.data.message);
   }
 };
+
+export const deleteMe = async () => {
+  try {
+    await axios({
+      method: "DELETE",
+      url: "/api/v1/users/deleteMe",
+    });
+
+    showAlert("success", "Deleted account successfully!");
+    location.assign("/");
+  } catch (err) {
+    showAlert("error", err.response.data.message);
+  }
+};
