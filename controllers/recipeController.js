@@ -3,6 +3,7 @@ const sharp = require("sharp");
 const Recipe = require("../models/recipeModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const cloudinary = require("../utils/cloudinary");
 const factory = require("./handlerFactory");
 
 const multerStorage = multer.memoryStorage();
@@ -35,6 +36,12 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(`public/img/recipes/${req.body.image}`);
+
+    const result = await cloudinary.uploader.upload(
+      `public/img/recipes/${req.body.image}`
+    );
+
+    req.body.image = result.secure_url;
   }
 
   if (req.files.stepImage) {
@@ -52,8 +59,12 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
             .jpeg({ quality: 90 })
             .toFile(`public/img/recipes/${filename}`);
 
+          const result = await cloudinary.uploader.upload(
+            `public/img/recipes/${filename}`
+          );
+
           req.body.steps.push({
-            image: filename,
+            image: result.secure_url,
             number: Number(n) + 1,
             text: req.body.stepTexts[i],
           });

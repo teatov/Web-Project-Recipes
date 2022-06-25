@@ -6,6 +6,7 @@ const glob = require("glob");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const cloudinary = require("../utils/cloudinary");
 const factory = require("./handlerFactory");
 
 const multerStorage = multer.memoryStorage();
@@ -34,6 +35,10 @@ exports.processUserPhoto = catchAsync(async (req, res, next) => {
     .jpeg({ quality: 90 })
     .toFile(`public/img/users/${req.file.filename}`);
 
+  const result = await cloudinary.uploader.upload(
+    `public/img/users/${req.file.filename}`
+  );
+  req.body.photo = result.secure_url;
   next();
 });
 
@@ -57,7 +62,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  const filteredBody = filterObj(req.body, "name", "email");
+  const filteredBody = filterObj(req.body, "name", "email", "photo");
 
   if (req.file) {
     filteredBody.photo = req.file.filename;
