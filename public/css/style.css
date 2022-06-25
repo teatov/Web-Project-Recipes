@@ -444,6 +444,12 @@ footer {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+.fixed-y {
+  position: fixed;
+  left: 50vh;
+  top: 50vh;
+}
+
 .modal img {
   display: block;
   width: auto;

@@ -8,32 +8,34 @@
     <div class="content">
       <%- include('../partials/header'); %>
       <h2>Категории</h2>
-      <ol>
-        <a class="type-add" href="">[+]</a>
-        <% dishTypes.forEach((type) => { %>
-        <li data-id="<%= type._id %>">
-          <%= type.name %> <a class="type-delete" href="">[X]</a>
-          <a class="category-add" href="">[+]</a>
-        </li>
-        <ol data-id="<%= type._id %>">
-          <% type.categories.forEach((category) => { %>
-          <li data-id="<%= category._id %>">
-            <%= category.name %> <a class="category-delete" href="">[X]</a>
-            <a class="subcategory-add" href="">[+]</a>
+      <div class="flex justify-flex-start">
+        <ol>
+          <a class="type-add" href="">[+]</a>
+          <% dishTypes.forEach((type) => { %>
+          <li data-id="<%= type._id %>">
+            <%= type.name %> <a class="type-delete" href="">[X]</a>
+            <a class="category-add" href="">[+]</a>
           </li>
-          <ol data-id="<%= category._id %>">
-            <% category.subcategories.forEach((subcategory) => { %>
-            <li data-id="<%= subcategory._id %>">
-              <%= subcategory.name %>
-              <a class="subcategory-delete" href="">[X]</a>
+          <ol data-id="<%= type._id %>">
+            <% type.categories.forEach((category) => { %>
+            <li data-id="<%= category._id %>">
+              <%= category.name %> <a class="category-delete" href="">[X]</a>
+              <a class="subcategory-add" href="">[+]</a>
             </li>
+            <ol data-id="<%= category._id %>">
+              <% category.subcategories.forEach((subcategory) => { %>
+              <li data-id="<%= subcategory._id %>">
+                <%= subcategory.name %>
+                <a class="subcategory-delete" href="">[X]</a>
+              </li>
+              <% }) %>
+            </ol>
             <% }) %>
           </ol>
           <% }) %>
         </ol>
-        <% }) %>
-      </ol>
-      <input id="new-type-name" type="text" />
+        <input id="new-type-name" type="text" class="fixed-y" />
+      </div>
     </div>
     <%- include('../partials/footer'); %> <%- include('../partials/modal'); %>
   </body>
