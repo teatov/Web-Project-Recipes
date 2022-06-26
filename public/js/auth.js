@@ -15,7 +15,7 @@ export const login = async (email, password) => {
 
     if (res.data.status === "success") {
       showAlert("success", "Вход успешно выполнен!");
-      location.assign("/");
+      location.assign("/me");
     }
   } catch (err) {
     showAlert("error", err.response.data.message);
@@ -51,7 +51,7 @@ export const signup = async (name, email, password, passwordConfirm) => {
 
     if (res.data.status === "success") {
       showAlert("success", "Регистрация выполнена успешно!");
-      location.assign("/");
+      location.assign("/me");
     }
   } catch (err) {
     showAlert("error", err.response.data.message);
