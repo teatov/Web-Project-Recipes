@@ -121,7 +121,8 @@
       <section>
         <ul class="list-narrow">
           <h2>КОММЕНТАРИИ:</h2>
-          <% recipe.comments.forEach((comment) => { %>
+          <% recipe.comments.sort((a, b) => { return a.createdAt - b.createdAt;
+          }).forEach((comment) => { %>
           <li class="flex justify-space-between">
             <div class="card flex-grow">
               <div class="flex align-center justify-flex-start">
