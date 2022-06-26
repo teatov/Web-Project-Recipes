@@ -30,7 +30,7 @@ const modalContainerImage = document.querySelector(".modal img");
 const modal = document.querySelector(".modal");
 const recipeDeleteBtns = document.querySelectorAll(".delete-recipe");
 const bookmarkDeleteBtns = document.querySelectorAll(".delete-bookmark");
-const sendCommentBtn = document.querySelector(".send-comment");
+const sendCommentForm = document.querySelector(".send-comment");
 const recipeCreateForm = document.querySelector(".recipe-create-form");
 const addIngredientBtn = document.querySelector(".add-ingredient");
 const addStepBtn = document.querySelector(".add-step");
@@ -145,10 +145,11 @@ if (recipeDeleteBtns) {
   });
 }
 
-if (sendCommentBtn) {
-  sendCommentBtn.addEventListener("click", () => {
+if (sendCommentForm) {
+  sendCommentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
     const commentText = document.querySelector(".comment-text").value;
-    createComment(commentText, sendCommentBtn.dataset.recipe);
+    createComment(commentText, sendCommentForm.dataset.recipe);
     document.querySelector(".comment-text").value = "";
   });
 }

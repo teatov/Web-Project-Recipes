@@ -139,15 +139,15 @@
           <% if (locals.user) { %>
             <div class="divider"></div>
             <h2>НАПИСАТЬ КОММЕНТАРИЙ:</h2>
+            <form data-recipe="<%= recipe.slug %>" class="send-comment flex flex-column">
               <textarea
-                class="flex-grow comment-text"
-                
-                id=""
+                class="comment-text"
                 rows="5"
               ></textarea>
             <div class="flex justify-flex-end">
-              <button data-recipe="<%= recipe.slug %>" class="bg-green send-comment"><span class="icon icon--comment"></span>Отправить комментарий</button>
+              <button class="bg-green"><span class="icon icon--comment"></span>Отправить комментарий</button>
             </div>
+            </form>
             <% } %>
         </ul>
         <div class="divider"></div>
