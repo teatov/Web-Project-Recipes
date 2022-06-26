@@ -31,7 +31,7 @@ exports.getRecipe = catchAsync(async (req, res, next) => {
     path: "comments",
     fields: "text user createdAt",
   });
-
+  console.log("!!!!!!!!!");
   if (!recipe) {
     return next(new AppError("Рецепта с таким названием не существует.", 404));
   }

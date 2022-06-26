@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const multer = require("multer");
 const sharp = require("sharp");
 const Recipe = require("../models/recipeModel");
@@ -30,18 +32,25 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
 
   if (req.files.imageCover) {
-    req.body.image = `recipe-${req.body.idRecipe}-${Date.now()}.jpeg`;
+    const filename = `recipe-${req.body.idRecipe}-${Date.now()}.jpeg`;
     await sharp(req.files.imageCover[0].buffer)
       .resize(2000, 1333, { withoutEnlargement: true })
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
-      .toFile(`public/img/recipes/${req.body.image}`);
+      .toFile(`public/img/recipes/${filename}`);
 
     const result = await cloudinary.uploader.upload(
-      `public/img/recipes/${req.body.image}`
+      `public/img/recipes/${filename}`
     );
-
     req.body.image = result.secure_url;
+    fs.unlink(
+      path.join(__dirname, `../public/img/recipes/${filename}`),
+      (err) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
   }
 
   if (req.files.stepImage) {
@@ -67,6 +76,14 @@ exports.processRecipeImages = catchAsync(async (req, res, next) => {
             number: Number(n) + 1,
             text: req.body.stepTexts[i],
           });
+          fs.unlink(
+            path.join(__dirname, `../public/img/recipes/${filename}`),
+            (err) => {
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
         } else {
           req.files.stepImage.splice(i, 0, "");
           req.body.steps.push({

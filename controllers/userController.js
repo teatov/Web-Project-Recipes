@@ -2,7 +2,6 @@ const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 const sharp = require("sharp");
-const glob = require("glob");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -39,6 +38,14 @@ exports.processUserPhoto = catchAsync(async (req, res, next) => {
     `public/img/users/${req.file.filename}`
   );
   req.body.photo = result.secure_url;
+  fs.unlink(
+    path.join(__dirname, `../public/img/users/${req.file.filename}`),
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
   next();
 });
 
@@ -61,24 +68,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       new AppError("По этому маршруту нельзя обновлять пароль!", 400)
     );
   }
-
   const filteredBody = filterObj(req.body, "name", "email", "photo");
-
-  if (req.file) {
-    filteredBody.photo = req.file.filename;
-
-    glob(
-      `public/img/users/user-${req.user.id}*.jpeg`,
-      {},
-      function (er, files) {
-        files.forEach((file) => {
-          if (file.replace("public/img/users/", "") !== req.file.filename) {
-            fs.unlinkSync(path.join(__dirname, `../${file}`));
-          }
-        });
-      }
-    );
-  }
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,

@@ -1,6 +1,3 @@
-const path = require("path");
-const fs = require("fs");
-const glob = require("glob");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
@@ -17,26 +14,6 @@ exports.deleteOne = (Model) =>
 
     if (!doc) {
       return next(new AppError("Документ с таким ID не найден", 404));
-    }
-
-    if (doc.slug) {
-      glob(
-        `public/img/recipes/recipe-${doc._id}*.jpeg`,
-        {},
-        function (er, files) {
-          files.forEach((file) => {
-            fs.unlinkSync(path.join(__dirname, `../${file}`));
-          });
-        }
-      );
-    }
-
-    if (doc.email) {
-      glob(`public/img/users/user-${doc._id}*.jpeg`, {}, function (er, files) {
-        files.forEach((file) => {
-          fs.unlinkSync(path.join(__dirname, `../${file}`));
-        });
-      });
     }
 
     res.status(204).json({
