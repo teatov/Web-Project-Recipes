@@ -52,7 +52,6 @@ class APIFeatures {
   search() {
     if (this.queryString.search) {
       const search = this.queryString.search
-        .slice(1, this.queryString.search.length - 1)
         .replace(/\s+/g, " ")
         .replaceAll("+", " ");
       const searchRegex = `(${search.replaceAll(" ", "|")})`;

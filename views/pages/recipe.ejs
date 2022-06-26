@@ -120,7 +120,7 @@
       </section>
       <section>
         <ul class="list-narrow">
-          <h2>КОММЕНТАРИИ:</h2>
+          <h2><%= recipe.comments.length > 0 ? "КОММЕНТАРИИ:" : "КОММЕНТАРИЕВ НЕТ..." %></h2>
           <% recipe.comments.sort((a, b) => { return a.createdAt - b.createdAt;
           }).forEach((comment) => { %>
           <li class="flex justify-space-between">

@@ -38,6 +38,9 @@
           </div>
         </div>
         <div class="flex-grow">
+          <% if (recipes.length === 0) { %>
+            <h2>Ничего не найдено :(</h2>
+            <% } %>
           <% recipes.forEach((recipe) => { %>
           <li class="flex justify-space-between flex-responsive">
             <%- include('../partials/recipe-card', {recipe: recipe}); %>
