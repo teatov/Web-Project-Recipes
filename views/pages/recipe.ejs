@@ -125,8 +125,8 @@
           <li class="flex justify-space-between">
             <div class="card flex-grow">
               <div class="flex align-center justify-flex-start">
-                <img src="<%= comment.user.photo %>" crossorigin="anonymous" alt="" class="avatar" />
-                <h2><%= comment.user.name %></h2>
+                <img src="<%= comment.user?.photo %>" crossorigin="anonymous" alt="" class="avatar" />
+                <h2><%= comment.user?.name %></h2>
                 <h3><%= comment.createdAt.toLocaleString() %></h3>
               </div>
               <p>

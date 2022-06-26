@@ -93,7 +93,7 @@
             <input type="email" id="email" value="<%= locals.user.email %>" />
             <h3>Фотография:</h3>
             <img
-              src="<%= locals.user.photo %>"
+              src="<%= locals.user.photo ? locals.user.photo : '' %>"
               crossorigin="anonymous"
               alt=""
               class="avatar"
