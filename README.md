@@ -1,2 +1,1 @@
-# Web-Project-Recipes
-а
+Курсовой проект. Сайт для создания и просмотра рецептов на JavaScript, NodeJS, Express и MongoDB.
